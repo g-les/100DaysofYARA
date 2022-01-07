@@ -9,6 +9,15 @@ import "pe"
 import "hash"
 import "math"
 
+rule SUSP_space_in_section_name
+{
+    meta:
+    description = "look for a space character in a section name (which is pretty unusual)"
+    DaysofYARA_day = "7/100"
+  condition:
+    for any section in pe.sections: (section.name contains " ")
+}
+
 rule SUSP_PE_at_Overlay
 { meta:
 	description = "check for an additional PE header found at the overlay offset"
