@@ -16,10 +16,10 @@ rule SUSP_Single_Byte_XOR_Encoded_PE_rsrc
     DaysofYARA_day = "10/100"
     reference = "https://www.youtube.com/watch?v=4gTaGfFyMK4&t=1189s&ab_channel=OALabs"
   condition:
-	for any resource in pe.resources: (
-		(uint8(resource.offset) ^ uint8(resource.offset + 3) == 0x4d and
-		uint8(resource.offset+1) ^ uint8(resource.offset + 3) == 0x5a ) and
-		uint16(resource.offset) != 0x5a4d )
+    for any resource in pe.resources: (
+    (uint8(resource.offset) ^ uint8(resource.offset + 3) == 0x4d and
+    uint8(resource.offset+1) ^ uint8(resource.offset + 3) == 0x5a ) and
+    uint16(resource.offset) != 0x5a4d )
 }
 
 rule SUSP_Single_Byte_XOR_Encoded_PE_overlay
