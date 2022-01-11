@@ -9,6 +9,33 @@ import "pe"
 import "hash"
 import "math"
 
+rule SUSP_b64d_PE_at_Overlay
+{
+  meta:
+    description = "looking for probable base64 encoded PE headers in the overlay of a PE!"
+    DaysofYARA_day = "11/100"
+
+  condition:
+    pe.overlay.offset != 0x0 and
+    uint32be(pe.overlay.offset) == 0x54567151 and  //byes are TVqQAAMAAAAEAAAA
+    uint32be(pe.overlay.offset + 4) == 0x41414D41 //byes are TVqQAAMAAAAEAAAA
+
+}
+
+rule SUSP_b64d_PE_at_Rsrc
+{
+  meta:
+    description = "looking for probable base64 encoded PE headers in the resources of a PE!"
+    DaysofYARA_day = "11/100"
+
+  condition:
+    for any resource in pe.resources: (
+      resource.type == 10 and //check that its a data resource
+      uint32be(resource.offset) == 0x54567151 and //byes are TVqQAAMAAAAEAAAA
+      uint32be(resource.offset + 4) == 0x41414D41
+    )
+}
+
 rule SUSP_Single_Byte_XOR_Encoded_PE_rsrc
 { 
   meta:
