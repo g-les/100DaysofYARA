@@ -9,6 +9,32 @@ import "pe"
 import "hash"
 import "math"
 
+rule SUSP_PE_Rsrc_PrevalentByte_Not_0
+{
+  meta:
+    description = "using a forthcoming feature in math module, look for RCDATA resources where the most common byte (mode) is NOT zero. Plaintext PE's do have a mode of zero, so this might be a nice subsitution for measuring entropy"
+    DaysofYARA_day = "12/100"
+    WARNING = "REQUIRES YARA 4.2.0-rc1 !!"
+  condition:
+    for any resource in pe.resources:(
+    resource.type == 10 and // ensure its RCDATA and not an icon
+    resource.length > 300 and //check the length homie, not the size, to find things that might be encrypted payloads?
+    math.mode(resource.offset, resource.length) != 0x0 //check if the most seen byte is not a zero, which is common for plaintext files
+          )
+}
+
+rule SUSP_PE_Overlay_PrevalentByte_Not_0
+{
+  meta:
+    description = "using a forthcoming feature in math module, look for PE overlays where the most common byte (mode) is NOT zero. Plaintext PE's do have a mode of zero, so this might be a nice subsitution for measuring entropy"
+    DaysofYARA_day = "12/100"
+    WARNING = "REQUIRES YARA 4.2.0-rc1 !!"
+  condition:
+    math.mode(pe.overlay.offset, pe.overlay.size) != 0x0 //check if the most seen byte is not a zero, which is common for plaintext files
+    and pe.overlay.offset != 0x0 // make sure the overlay isn't at 0
+    and pe.overlay.size > 300 // arbitrary size to find things that might be encrypted payloads?
+}
+
 rule SUSP_b64d_PE_at_Overlay
 {
   meta:
