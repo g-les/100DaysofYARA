@@ -9,6 +9,15 @@ import "pe"
 import "hash"
 import "math"
 
+rule SUSP_ICMP_Imports
+{
+  meta:
+    description = "looking for imports related to ICMP protocol usage!"
+    DaysofYARA_day = "13/100"
+  condition:
+    pe.imports(/IPHLPAPI.dll/i, /Icmp/i)
+}
+
 rule SUSP_PE_Rsrc_PrevalentByte_Not_0
 {
   meta:
