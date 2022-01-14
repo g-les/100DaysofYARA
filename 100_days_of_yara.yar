@@ -9,6 +9,32 @@ import "pe"
 import "hash"
 import "math"
 
+rule SUSP_Credstore_GUID_CryptUnprotectData
+{
+  meta:
+    description = "check for references to the credstore GUID that can decrypt credential pairs with CryptUnprotectData import to decrypt them"
+    reference = "https://vblocalhost.com/uploads/VB2021-50.pdf"
+    reference = "https://twitter.com/gentilkiwi/status/1193139734240989184"
+    DaysofYARA_day = "14/100"
+  strings:
+    $ = "abe2869f-9b47-4cd9-a358-c22904dba7f7" ascii wide
+  condition:
+    all of them and pe.imports("Crypt32.dll", "CryptUnprotectData")
+}
+
+rule SUSP_Credstore_GUID
+{
+  meta:
+    description = "check for references to the credstore GUID that can decrypt credential pairs without CryptUnprotectData import to decrypt them"
+    reference = "https://vblocalhost.com/uploads/VB2021-50.pdf"
+    reference = "https://twitter.com/gentilkiwi/status/1193139734240989184"
+    DaysofYARA_day = "14/100"
+  strings:
+    $ = "abe2869f-9b47-4cd9-a358-c22904dba7f7" ascii wide
+  condition:
+    all of them and not SUSP_Credstore_GUID_CryptUnprotectData
+}
+
 rule SUSP_ICMP_Imports
 {
   meta:
