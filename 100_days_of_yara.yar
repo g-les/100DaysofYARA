@@ -9,6 +9,214 @@ import "pe"
 import "hash"
 import "math"
 
+
+rule Method_InternalComm_NamedPipe
+{
+  meta:
+    description = "check for a reference to the start of a named pipe to send data across servers / hosts using SMB for one-way communication."
+    reference = "https://docs.microsoft.com/en-us/windows/win32/ipc/named-pipes"
+    DaysofYARA_day = "15/100"
+  strings:
+    $ = "\\pipe\\" ascii wide
+    $ = "\\\\.\\pipe\\" ascii wide
+  condition:
+    1 of them
+}
+
+rule Method_InternalComm_NamedPipe_b64
+{
+  meta:
+    description = "check for a reference to the start of a named pipe to send data across servers / hosts using SMB for one-way communication"
+    reference = "https://docs.microsoft.com/en-us/windows/win32/ipc/named-pipes"
+    DaysofYARA_day = "15/100"
+  strings:
+    $ = "\\pipe\\" base64 base64wide
+    $ = "\\\\.\\pipe\\" base64 base64wide
+  condition:
+    1 of them
+}
+
+rule Method_InternalComm_NamedPipe_xor
+{
+  meta:
+    description = "check for a reference to the start of a named pipe to send data across servers / hosts using SMB for one-way communication. This XOR flavor catches a lotta Beacon"
+    reference = "https://docs.microsoft.com/en-us/windows/win32/ipc/named-pipes"
+    DaysofYARA_day = "15/100"
+  strings:
+    $ = "\\pipe\\" xor(0x01-0xff)
+    $ = "\\\\.\\pipe\\" xor(0x01-0xff)
+  condition:
+    1 of them
+}
+
+rule Method_InternalComm_NamedPipe_References
+{
+  meta:
+    description = "look for references to the System.IO.Pipes namespace that indicate interest in named pipes. Have seen use by both .NET and Powershell Tooling"
+    reference = "https://svch0st.medium.com/guide-to-named-pipes-and-hunting-for-cobalt-strike-pipes-dc46b2c5f575"
+    reference = "https://docs.microsoft.com/en-us/dotnet/api/system.io.pipes.namedpipeserverstream?view=net-6.0"
+    reference = "https://docs.microsoft.com/en-us/dotnet/api/system.io.pipes?view=net-6.0"
+    DaysofYARA_day = "15/100"
+  strings:
+    $ = "system.IO.Pipes" ascii wide
+    $ = "NamedPipeServerStream" ascii wide
+    $ = "NamedPipeClientStream" ascii wide
+    $ = "NamedPipeServerStreamAcl" ascii wide
+  condition:
+    1 of them
+}
+
+rule Method_InternalComm_AnonPipe_References
+{
+  meta:
+    description = "look for references to the System.IO.Pipes namespace that indicate interest in anonymous pipes. No hits in my visibility"
+    reference = "https://svch0st.medium.com/guide-to-named-pipes-and-hunting-for-cobalt-strike-pipes-dc46b2c5f575"
+    reference = "https://docs.microsoft.com/en-us/dotnet/api/system.io.pipes.namedpipeserverstream?view=net-6.0"
+    reference = "https://docs.microsoft.com/en-us/dotnet/api/system.io.pipes?view=net-6.0"
+    DaysofYARA_day = "15/100"
+  strings:
+    $ = "AnonymousPipeClientStream" ascii wide
+    $ = "AnonymousPipeServerStream" ascii wide
+    $ = "AnonymousPipeServerStreamAcl" ascii wide
+  condition:
+    1 of them
+}
+
+rule Method_InternalComm_PipeRights_References
+{
+  meta:
+    description = "look for references to the System.IO.Pipes namespace that indicate interest in named pipes. Have seen use by both .NET and Powershell Tooling"
+    reference = "https://svch0st.medium.com/guide-to-named-pipes-and-hunting-for-cobalt-strike-pipes-dc46b2c5f575"
+    reference = "https://docs.microsoft.com/en-us/dotnet/api/system.io.pipes.namedpipeserverstream?view=net-6.0"
+    reference = "https://docs.microsoft.com/en-us/dotnet/api/system.io.pipes?view=net-6.0"
+    DaysofYARA_day = "15/100"
+  strings:
+    $ = "PipeAccessRights" ascii wide
+    $ = "PipeAccessRule" ascii wide
+    $ = "PipeAuditRule" ascii wide
+    $ = "PipeDirection" ascii wide
+    $ = "PipeOptions" ascii wide
+    $ = "PipesAclExtensions" ascii wide
+    $ = "PipeSecurity" ascii wide
+    $ = "PipeStream" ascii wide
+    $ = "PipeStreamImpersonationWorker" ascii wide
+    $ = "PipeTransmissionMode" ascii wide
+  condition:
+    1 of them
+}
+
+rule Method_InternalComm_NamedPipe_References_b64
+{
+  meta:
+    description = "look for references to the System.IO.Pipes namespace that indicate interest in named pipes. Have seen use by both .NET and Powershell Tooling"
+    reference = "https://svch0st.medium.com/guide-to-named-pipes-and-hunting-for-cobalt-strike-pipes-dc46b2c5f575"
+    reference = "https://docs.microsoft.com/en-us/dotnet/api/system.io.pipes.namedpipeserverstream?view=net-6.0"
+    reference = "https://docs.microsoft.com/en-us/dotnet/api/system.io.pipes?view=net-6.0"
+    DaysofYARA_day = "15/100"
+  strings:
+    $ = "system.IO.Pipes" base64 base64wide
+    $ = "NamedPipeServerStream" base64 base64wide
+    $ = "NamedPipeClientStream" base64 base64wide
+    $ = "NamedPipeServerStreamAcl" base64 base64wide
+  condition:
+    1 of them
+}
+
+rule Method_InternalComm_AnonPipe_References_b64
+{
+  meta:
+    description = "look for references to the System.IO.Pipes namespace that indicate interest in anonymous pipes. No hits in my visibility"
+    reference = "https://svch0st.medium.com/guide-to-named-pipes-and-hunting-for-cobalt-strike-pipes-dc46b2c5f575"
+    reference = "https://docs.microsoft.com/en-us/dotnet/api/system.io.pipes.namedpipeserverstream?view=net-6.0"
+    reference = "https://docs.microsoft.com/en-us/dotnet/api/system.io.pipes?view=net-6.0"
+    DaysofYARA_day = "15/100"
+  strings:
+    $ = "AnonymousPipeClientStream" base64 base64wide
+    $ = "AnonymousPipeServerStream" base64 base64wide
+    $ = "AnonymousPipeServerStreamAcl" base64 base64wide
+  condition:
+    1 of them
+}
+
+rule Method_InternalComm_PipeRights_References_b64
+{
+  meta:
+    description = "look for references to the System.IO.Pipes namespace that indicate interest in named pipes. Have seen use by both .NET and Powershell Tooling"
+    reference = "https://svch0st.medium.com/guide-to-named-pipes-and-hunting-for-cobalt-strike-pipes-dc46b2c5f575"
+    reference = "https://docs.microsoft.com/en-us/dotnet/api/system.io.pipes.namedpipeserverstream?view=net-6.0"
+    reference = "https://docs.microsoft.com/en-us/dotnet/api/system.io.pipes?view=net-6.0"
+    DaysofYARA_day = "15/100"
+  strings:
+    $ = "PipeAccessRights" base64 base64wide
+    $ = "PipeAccessRule" base64 base64wide
+    $ = "PipeAuditRule" base64 base64wide
+    $ = "PipeDirection" base64 base64wide
+    $ = "PipeOptions" base64 base64wide
+    $ = "PipesAclExtensions" base64 base64wide
+    $ = "PipeSecurity" base64 base64wide
+    $ = "PipeStream" base64 base64wide
+    $ = "PipeStreamImpersonationWorker" base64 base64wide
+    $ = "PipeTransmissionMode" base64 base64wide
+  condition:
+    1 of them
+}
+
+rule Method_InternalComm_NamedPipe_References_XOR
+{
+  meta:
+    description = "look for references to the System.IO.Pipes namespace that indicate interest in named pipes. Have seen use by both .NET and Powershell Tooling"
+    reference = "https://svch0st.medium.com/guide-to-named-pipes-and-hunting-for-cobalt-strike-pipes-dc46b2c5f575"
+    reference = "https://docs.microsoft.com/en-us/dotnet/api/system.io.pipes.namedpipeserverstream?view=net-6.0"
+    reference = "https://docs.microsoft.com/en-us/dotnet/api/system.io.pipes?view=net-6.0"
+    DaysofYARA_day = "15/100"
+  strings:
+    $ = "system.IO.Pipes" xor(0x01-0xff)
+    $ = "NamedPipeServerStream" xor(0x01-0xff)
+    $ = "NamedPipeClientStream" xor(0x01-0xff)
+    $ = "NamedPipeServerStreamAcl" xor(0x01-0xff)
+  condition:
+    1 of them
+}
+
+rule Method_InternalComm_AnonPipe_References_XOR
+{
+  meta:
+    description = "look for references to the System.IO.Pipes namespace that indicate interest in anonymous pipes. No hits in my visibility"
+    reference = "https://svch0st.medium.com/guide-to-named-pipes-and-hunting-for-cobalt-strike-pipes-dc46b2c5f575"
+    reference = "https://docs.microsoft.com/en-us/dotnet/api/system.io.pipes.namedpipeserverstream?view=net-6.0"
+    reference = "https://docs.microsoft.com/en-us/dotnet/api/system.io.pipes?view=net-6.0"
+    DaysofYARA_day = "15/100"
+  strings:
+    $ = "AnonymousPipeClientStream" xor(0x01-0xff)
+    $ = "AnonymousPipeServerStream" xor(0x01-0xff)
+    $ = "AnonymousPipeServerStreamAcl" xor(0x01-0xff)
+  condition:
+    1 of them
+}
+
+rule Method_InternalComm_PipeRights_References_XOR
+{
+  meta:
+    description = "look for references to the System.IO.Pipes namespace that indicate interest in named pipes. Have seen use by both .NET and Powershell Tooling"
+    reference = "https://svch0st.medium.com/guide-to-named-pipes-and-hunting-for-cobalt-strike-pipes-dc46b2c5f575"
+    reference = "https://docs.microsoft.com/en-us/dotnet/api/system.io.pipes.namedpipeserverstream?view=net-6.0"
+    reference = "https://docs.microsoft.com/en-us/dotnet/api/system.io.pipes?view=net-6.0"
+    DaysofYARA_day = "15/100"
+  strings:
+    $ = "PipeAccessRights" xor(0x01-0xff)
+    $ = "PipeAccessRule" xor(0x01-0xff)
+    $ = "PipeAuditRule" xor(0x01-0xff)
+    $ = "PipeDirection" xor(0x01-0xff)
+    $ = "PipeOptions" xor(0x01-0xff)
+    $ = "PipesAclExtensions" xor(0x01-0xff)
+    $ = "PipeSecurity" xor(0x01-0xff)
+    $ = "PipeStream" xor(0x01-0xff)
+    $ = "PipeStreamImpersonationWorker" xor(0x01-0xff)
+    $ = "PipeTransmissionMode" xor(0x01-0xff)
+  condition:
+    1 of them
+}
+
 rule SUSP_Credstore_GUID_CryptUnprotectData
 {
   meta:
