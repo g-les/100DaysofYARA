@@ -10,6 +10,122 @@ import "hash"
 import "math"
 
 
+
+rule Method_InternalComm_RPC_NamedPipe
+{
+  meta:
+    description = "check for a string required in a Remote Procedure Call (a type of IPC) that uses a named pipe"
+    reference = "https://docs.microsoft.com/en-us/windows/win32/api/rpcdce/nf-rpcdce-rpcstringbindingcomposew"
+    reference = "https://specterops.io/assets/resources/RPC_for_Detection_Engineers.pdf"
+    DaysofYARA_day = "16/100"
+  strings:
+    $ = "ncacn_np" ascii wide
+  condition:
+    all of them
+}
+
+
+rule Method_InternalComm_RPC_NamedPipe_b64
+{
+  meta:
+    description = "check for a string required in a Remote Procedure Call (a type of IPC) that uses a named pipe"
+    reference = "https://docs.microsoft.com/en-us/windows/win32/api/rpcdce/nf-rpcdce-rpcstringbindingcomposew"
+    reference = "https://specterops.io/assets/resources/RPC_for_Detection_Engineers.pdf"
+    DaysofYARA_day = "16/100"
+  strings:
+    $ = "ncacn_np" base64 base64wide
+  condition:
+    all of them
+}
+
+rule Method_InternalComm_RPC_NamedPipe_XOR
+{
+  meta:
+    description = "check for a string required in a Remote Procedure Call (a type of IPC) that uses a named pipe"
+    reference = "https://docs.microsoft.com/en-us/windows/win32/api/rpcdce/nf-rpcdce-rpcstringbindingcomposew"
+    reference = "https://specterops.io/assets/resources/RPC_for_Detection_Engineers.pdf"
+    DaysofYARA_day = "16/100"
+  strings:
+    $ = "ncacn_np" xor(0x01-0xff)
+  condition:
+    all of them
+}
+
+rule Method_InternalComm_RPC_Protocols
+{
+  meta:
+    description = "check for a strings used by Remote Procedure Calls to implement other protocols that aren't named pipes"
+    reference = "https://docs.microsoft.com/en-us/windows/win32/api/rpcdce/nf-rpcdce-rpcstringbindingcomposew"
+    reference = "https://specterops.io/assets/resources/RPC_for_Detection_Engineers.pdf"
+    DaysofYARA_day = "16/100"
+  strings:
+    $ = "ncacn_http" ascii wide
+    $ = "ncacn_ip_udp" ascii wide
+    $ = "ncacn_ip_tcp" ascii wide
+    $ = "ncalrpc" ascii wide
+    $ = "upnprpc" ascii wide
+  condition:
+    any of them
+}
+
+rule Method_InternalComm_RPC_Protocols_b64
+{
+  meta:
+    description = "check for a strings used by Remote Procedure Calls to implement other protocols that aren't named pipes"
+    reference = "https://docs.microsoft.com/en-us/windows/win32/api/rpcdce/nf-rpcdce-rpcstringbindingcomposew"
+    reference = "https://specterops.io/assets/resources/RPC_for_Detection_Engineers.pdf"
+    DaysofYARA_day = "16/100"
+  strings:
+    $ = "ncacn_http" base64 base64wide
+    $ = "ncacn_ip_udp" base64 base64wide
+    $ = "ncacn_ip_tcp" base64 base64wide
+    $ = "ncalrpc" base64 base64wide
+    $ = "upnprpc" base64 base64wide
+  condition:
+    any of them
+}
+
+rule Method_InternalComm_RPC_Protocols_XOR
+{
+  meta:
+    description = "check for a strings used by Remote Procedure Calls to implement other protocols that aren't named pipes"
+    reference = "https://docs.microsoft.com/en-us/windows/win32/api/rpcdce/nf-rpcdce-rpcstringbindingcomposew"
+    reference = "https://specterops.io/assets/resources/RPC_for_Detection_Engineers.pdf"
+    DaysofYARA_day = "16/100"
+  strings:
+    $ = "ncacn_http" xor(0x01-0xff)
+    $ = "ncacn_ip_udp" xor(0x01-0xff)
+    $ = "ncacn_ip_tcp" xor(0x01-0xff)
+    $ = "ncalrpc" xor(0x01-0xff)
+    $ = "upnprpc" xor(0x01-0xff)
+  condition:
+    any of them
+}
+
+rule Method_InternalComm_RPC_MIDL_Lang_GUID
+{
+  meta:
+    description = "check for other strings related to RPC according to MSFT's links below"
+    reference = "https://docs.microsoft.com/en-us/windows/win32/midl/midl-language-reference"
+    DaysofYARA_day = "16/100"
+  strings:
+    $ = "ncacn_at_dsp" ascii wide
+    $ = "ncacn_dnet_nsp" ascii wide
+    $ = "ncacn_nb_ipx" ascii wide
+    $ = "ncacn_spx" ascii wide
+    $ = "ncacn_nb_nb" ascii wide
+    $ = "ncacn_nb_tcp" ascii wide
+    $ = "ncacn_vns_spp" ascii wide
+    $ = "ncadg_ip_udp" ascii wide
+    $ = "ncadg_ipx" ascii wide
+    $ = "E3514235-4B06-11D1-AB04-00C04FC2DCD2" ascii wide
+  condition:
+    any of them
+}
+
+
+
+
 rule Method_InternalComm_NamedPipe
 {
   meta:
