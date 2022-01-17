@@ -9,7 +9,47 @@ import "pe"
 import "hash"
 import "math"
 
+rule Method_InternalComm_InterProcessCommunication
+{
+  meta:
+    description = "check for the presence of a Inter Process Communication (umbrella over named pipes) string. IPC can be bidirectional, typically used by connecting to the IPC share (IPC$) via named pipe or - while a bunch of malware families reference named pipes, only your favorite actor's favorite actor reference these."
+    reference = "https://docs.microsoft.com/en-us/troubleshoot/windows-server/networking/inter-process-communication-share-null-session"
+    DaysofYARA_day = "16/100"
+  strings:
+    $ = "\\ipc$" nocase ascii wide
+    $ = "\\\\%s\\ipc$" nocase ascii wide
+    $ = "\\\\%s\\ipc" nocase ascii wide
+  condition:
+    1 of them
+}
 
+rule Method_InternalComm_InterProcessCommunication_b64
+{
+  meta:
+    description = "check for the presence of a Inter Process Communication (umbrella over named pipes) string. IPC can be bidirectional, typically used by connecting to the IPC share (IPC$) via named pipe or - while a bunch of malware families reference named pipes, only your favorite actor's favorite actor reference these."
+    reference = "https://docs.microsoft.com/en-us/troubleshoot/windows-server/networking/inter-process-communication-share-null-session"
+    DaysofYARA_day = "16/100"
+  strings:
+    $ = "\\ipc$" base64 base64wide
+    $ = "\\\\%s\\ipc$" base64 base64wide
+    $ = "\\\\%s\\ipc" base64 base64wide
+  condition:
+    1 of them
+}
+
+rule Method_InternalComm_InterProcessCommunication_xor
+{
+  meta:
+    description = "check for the presence of a Inter Process Communication (umbrella over named pipes) string. IPC can be bidirectional, typically used by connecting to the IPC share (IPC$) via named pipe or - while a bunch of malware families reference named pipes, only your favorite actor's favorite actor reference these."
+    reference = "https://docs.microsoft.com/en-us/troubleshoot/windows-server/networking/inter-process-communication-share-null-session"
+    DaysofYARA_day = "16/100"
+  strings:
+    $ = "\\ipc$" xor(0x01-0xff)
+    $ = "\\\\%s\\ipc$" xor(0x01-0xff)
+    $ = "\\\\%s\\ipc" xor(0x01-0xff)
+  condition:
+    1 of them
+}
 
 rule Method_InternalComm_RPC_NamedPipe
 {
