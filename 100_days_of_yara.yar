@@ -9,6 +9,62 @@ import "pe"
 import "hash"
 import "math"
 
+
+rule MAL_SquirrelWaffle_Blocklist_Section_Start
+{
+  meta:
+    description = "check for sequence used by SquirrelWaffle (now defunct malware) to find and load its blocklist blob, which is XOR encoded. The blob is pretty big, terminated with some null bytes, and is followed by the XOR key to decode it. This rule will look for the reference to the blob, then use the address of the blob as a starting point for a loop that tries to find the first 4 bytes of the XOR key, and decode the first four bytes of the blob, to make sure it properly decodes to the expected value "
+    hash = "20bf38b377868f4a617011fd9b39790824d0afd1d1ca089083913ebd62bb747f"
+    hash = "1d8efc7665bc83f1d7fe443ef4ce6c52eb4829769de0f7fb890b5b12bbcb92bd"
+    hash = "c88f8d086be8dd345babad15c76490ef889af7eaecb015f3107ff039f0ed5f2d"
+    DaysofYARA_day = "18/100"
+  strings:
+    $data_blob = { 8d 8d 7c fd fe ff 68 ?? 0? 00 00 68 }
+      //8d 8d 7c fd fe ff  LEA        ECX,[EBP + 0xfffefd7c]
+      //68 9c 08 00 00     PUSH       0x89c                 changes each loop
+      //68 f0 a5 5c 00     PUSH       blocklist_location
+  condition:
+    for 1 i in (
+    pe.rva_to_offset(uint32(@data_blob+12) - pe.image_base) .. 
+    math.min(pe.rva_to_offset(uint32(@data_blob+12) - pe.image_base) + 3000, 
+      //loop through the 3k bytes following the offset we found pointed to at the end of the $data_blob string, 
+      //stopping at the start of the next section 
+        
+	(pe.sections[2].raw_data_offset))): 
+        // use the start of the next section as the upper bound
+          (
+          (uint16(i) == 0x0000 and //set an anchor for the end of the data blob, where the XOR key starts
+            (
+            uint32be(i+2) ^ uint32be(pe.rva_to_offset(uint32(@data_blob+12) - pe.image_base) 
+            //xor the dword 2 bytes after the 00's with the first dword of the blocklist
+            ) == 0x39342e34))) // and verify that it decodes to the first IP address listed
+}
+
+rule MAL_SquirrelWaffle_Blocklist_Next_Section_Offset
+{
+  meta:
+    description = "check for sequence used by SquirrelWaffle (now defunct malware) to find and load its blocklist blob, which is XOR encoded. The blob is pretty big, terminated with some null bytes, and is followed by the XOR key to decode it. This rule will look for the reference to the blob, then use the address of the blob as a starting point for a loop that tries to find the first 4 bytes of the XOR key, and decode the first four bytes of the blob, to make sure it properly decodes to the expected value. This version of the rule attempts to use the section sizes as guardrails for the loop"
+    hash = "20bf38b377868f4a617011fd9b39790824d0afd1d1ca089083913ebd62bb747f"
+    hash = "1d8efc7665bc83f1d7fe443ef4ce6c52eb4829769de0f7fb890b5b12bbcb92bd"
+    hash = "c88f8d086be8dd345babad15c76490ef889af7eaecb015f3107ff039f0ed5f2d"
+    DaysofYARA_day = "18/100"
+  strings:
+    $data_blob = { 8d 8d 7c fd fe ff 68 ?? 0? 00 00 68 }
+      //8d 8d 7c fd fe ff  LEA        ECX,[EBP + 0xfffefd7c]
+      //68 9c 08 00 00     PUSH       0x89c                 changes each loop
+      //68 f0 a5 5c 00     PUSH       blocklist_loc
+  condition:
+    for any i in (pe.rva_to_offset(uint32(@data_blob+12) - pe.image_base) .. 
+    math.min(pe.sections[1].raw_data_offset + pe.sections[1].raw_data_size, pe.rva_to_offset(uint32(@data_blob+12) - pe.image_base) + 3000)): 
+      // use the 2nd section (index 1) as a guardrail for the loop
+        (
+        (uint16(i) == 0x0000 and //set an anchor for the end of the data blob, where the XOR key starts
+          (
+          uint32be(i+2) ^ uint32be(pe.rva_to_offset(uint32(@data_blob+12) - pe.image_base) //xor the dword 2 bytes after the 00's with the first dword of the blocklist
+          ) == 0x39342e34))) // and verify that it decodes to the first IP address listed
+
+}
+
 rule Method_InternalComm_InterProcessCommunication
 {
   meta:
