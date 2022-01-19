@@ -9,6 +9,14 @@ import "pe"
 import "hash"
 import "math"
 
+rule SUSP_CLSID_Imports
+{
+  meta:
+    description = "look for imports that may indicate CLSID and COM object interest"
+    DaysofYARA_day = "19/100"
+  condition:
+    pe.imports("ole32.dll", "StringFromCLSID")
+}
 
 rule MAL_SquirrelWaffle_Blocklist_Section_Start
 {
