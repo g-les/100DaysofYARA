@@ -9,6 +9,43 @@ import "pe"
 import "hash"
 import "math"
 
+rule SUSP_Shellcode_PE_Overlay_Offset
+{
+  meta:
+    description = "checking for probable shellcode bytes at PE Overlay"
+    DaysofYARA_day = "20/100"
+    hash = "47a49caaa6bd9bb4014f311369a610bdd0405eb36b19ed5f88ef232b0ac43483" //BLACKMIRROR
+    hash = "9d9697509adfd039f214b036497c16c21395f97eb8a58847ae46e7f37846414a" //BLACKMIRROR
+    hash = "cdcb5144c36c3aee7604fbafa191c51475ff11eaf7e2fba1bdf4f836edc4cda5" //BLACKMIRROR
+    hash = "ce363e58b8654642fee57ea84e9b3ca82393bb621d4822b964487912e1cf3f53" //BLACKMIRROR
+    hash = "e9dd6420aa2db28ae5eeb3963d020e1873de8e3109bfcb38e9116b9e51377969" //BLACKMIRROR
+    hash = "300519fa1af5c36371ab438405eb641f184bd2f491bdf24f04e5ca9b86d1b39c" //CROSSWALK
+    hash = "db866ef07dc1f2e1df1e6542323bc672dd245d88c0ee91ce0bd3da2c95aedf68" //CROSSWALK
+  condition:
+    uint16(pe.overlay.offset) == 0xE8FC or
+    uint16(pe.overlay.offset) == 0x48FC or
+    uint16(pe.overlay.offset) == 0xE800 or
+    uint16(pe.overlay.offset) == 0x4800 or
+    uint16(pe.overlay.offset) == 0x00E8 or
+    uint16(pe.overlay.offset) == 0x0048
+}
+
+rule SUSP_Shellcode_PE_rsrc
+{
+meta:
+    description = "checking for probable shellcode bytes at PE resource"
+    DaysofYARA_day = "20/100"
+  condition:
+    for any resource in pe.resources: ( resource.type == 10 and // ensure its RCDATA and not an icon
+      (
+      uint16(resource.offset) == 0xE8FC or
+      uint16(resource.offset) == 0x48FC or
+      uint16(resource.offset) == 0xE800 or
+      uint16(resource.offset) == 0x4800 or
+      uint16(resource.offset) == 0x00E8 or
+      uint16(resource.offset) == 0x0048 ))
+}
+
 rule SUSP_CLSID_Imports
 {
   meta:
