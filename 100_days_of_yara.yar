@@ -9,6 +9,23 @@ import "pe"
 import "hash"
 import "math"
 
+rule MAL_CACHEMONEY_Config
+{
+  meta:
+    DaysofYARA_day = "21/100"
+    reference = "https://twitter.com/int2e_/status/1148711362853515265?s=21"
+    description = "inspired by Adrien to detect CACHEMONEY configs based on decoded values and expected first bytes"
+
+  condition:
+    filesize < 200KB and 
+    ((uint8(0x0) ^ 0xEF) ^ uint8(0x32)) == 0x54 and 
+      // first byte of config is always 0xef, so xor that with the value at 0x0 to get first byte of xor key and verify it decoded as expected
+    ((uint8(0x1) ^ 0xBB) ^ uint8(0x33)) == 0x69 and 
+      // 2nd byte of config is always 0xbb, xor that with int at 0x1 to check byte of the XOR key, and verify it decoded the cleartext byte
+    ((uint8(0x2) ^ 0xBF) ^ uint8(0x34)) == 0x6D  
+      // 3rd byte of config is always 0xbf, so xor that with the value at 0x2 to get third byte of xor key
+}
+
 rule SUSP_Shellcode_PE_Overlay_Offset
 {
   meta:
