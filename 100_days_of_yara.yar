@@ -9,6 +9,30 @@ import "pe"
 import "hash"
 import "math"
 
+rule MAL_PlugX_Encoded_DAT_Loop
+{
+  meta:
+    description = "track PlugX variants based on encoding mechanism of DAT file a bit differently than the homies at DTCERT"
+    DaysofYARA_day = "22/100"
+    reference = "https://github.com/telekom-security/malware_analysis/blob/main/plugx/plugx_mustang_panda.yar"
+    reference = "https://twitter.com/DTCERT/status/1454022175254618114"
+    reference = "https://unit42.paloaltonetworks.com/thor-plugx-variant/"
+  condition:
+    filesize > 80KB and filesize < 200KB and //make sure the file the right size
+    uint16(0) != 0x5A4D and uint16(0) != 0x4b50 and // ignore some common file types
+    uint32be(0) != 0x6465780a and uint16(0) != 0x534d and // ignore some common file types
+    uint16be(0) != 0x504B and uint16be(0) != 0xD0CF and // ignore some common file types
+    uint16be(0) != 0x5261 and uint16be(0) != 0x4C5A and  // ignore some common file types
+      for 1 byte in (0 .. 15): //loop across the first 15 bytes bytes of a file
+      (
+        uint8(byte) == 0x00 and // find that only 1 of the first 15 bytes is 00
+        (uint8(byte + 1) ^ uint8(0x0) == 0x4d) and // and the byte after the 00 anchor, XOR'd by the byte at 0x0 will be M
+        (uint8(byte + 2) ^ uint8(0x1) == 0x5a) and // and the byte 2 bytes after the 00 anchor, XOR'd by the byte at 0x1 will be Z
+        math.count(0x00, 0, 15) == 1 //make sure null byte only occurs once in the first 15 bytes
+        // programming note - cannot pass the byte variable to math.count() to process
+      )
+}
+
 rule MAL_CACHEMONEY_Config
 {
   meta:
