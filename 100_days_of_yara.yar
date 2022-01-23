@@ -9,6 +9,28 @@ import "pe"
 import "hash"
 import "math"
 
+
+rule SUSP_WSM_Service_Assembly
+{
+  meta:
+    DaysofYARA_day = "23/100"
+    description = "Track references to System.ServiceModel.Web assemblies and WCF service contracts, as used in the passive NEPTUN backdoor"
+    reference = "https://docs.microsoft.com/en-us/dotnet/framework/wcf/feature-details/"
+    reference = "https://docs.microsoft.com/en-us/dotnet/framework/wcf/migrating-from-net-remoting-to-wcf"
+    reference = "https://norfolkinfosec.com/http-listener/"
+  strings:
+    $assembly_ref = "System.ServiceModel.Web" ascii wide
+    $class1 = "ServiceHost" ascii wide
+    $class2 = "DataContractAttribute" ascii wide
+    $class3 = "ServiceContractAttribute" ascii wide
+    $class4 = "OperationContractAttribute" ascii wide
+    $localhost = "localhost" ascii wide
+  condition:
+    uint16(0) == 0x5a4d and
+    filesize < 250KB and
+    all of them
+}
+
 rule MAL_PlugX_Encoded_DAT_Loop
 {
   meta:
