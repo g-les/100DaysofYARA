@@ -9,6 +9,52 @@ import "pe"
 import "hash"
 import "math"
 
+rule SUSP_ExchangeTransport_Service_Assembly
+{
+  meta:
+    DaysofYARA_day = "24/100"
+    description = "Track references to Microsoft.Exchange.Data.Transport assemblies and other aspects of exchange transport agents, as used by the passive NETTRANS backdoor"
+    reference = "https://docs.microsoft.com/en-us/previous-versions/office/exchange-server-api/aa564119(v=exchg.150)"
+  strings:
+  
+    //Microsoft.Exchange.Data.Transport.Smtp
+    $ = "SmtpReceiveAgentFactory" ascii
+    $ = "SmtpReceiveAgent" ascii
+      
+    //Microsoft.Exchange.Data.Transport.Routing
+    $ = "RoutingAgentFactory"
+    $ = "RoutingAgent"
+      
+    //Microsoft.Exchange.Data.Transport
+    $ = "SmtpServer" ascii
+    $ = "ReceiveMessageEventSource" ascii
+    $ = "EndOfDataEventArgs" ascii
+    $ = "EndOfDataEventHandler" ascii
+    $ = "add_OnEndOfData" ascii
+    $ = "RejectEventSource" ascii
+    $ = "RejectEventArgs" ascii
+    $ = "RejectEventHandler" ascii
+    $ = "add_OnReject" ascii
+    $ = "EnvelopeRecipientCollection" ascii
+    $ = "MailItem" ascii
+    $ = "get_MailItem" ascii
+      
+    //Microsoft.Exchange.Data.Transport.Email
+    $ = "EmailMessage" ascii
+    $ = "get_Message" ascii
+      
+    //Microsoft.Exchange.Data.Common
+    $ = "DotfuscatorAttribute"
+    $ = "TransportRuleAgentFactory"
+    $ = "TransportRuleAgent"
+    $ = "RedirectionAgentFactory"
+    $ = "RedirectionAgent"
+    $ = "CreateAgent"
+  condition:
+    uint16(0) == 0x5a4d and
+    filesize < 250KB and
+    5 of them
+}
 
 rule SUSP_WSM_Service_Assembly
 {
