@@ -9,6 +9,37 @@ import "pe"
 import "hash"
 import "math"
 
+rule MAL_Winnti_Rolling_XOR_BruteForce
+{
+  meta:
+    DaysofYARA_day = "25/100"
+    desc = "brute force the configurtion contained in known Winnti samples' overlays for the encoded ports listed after each C2"
+    ref = "Heavily based on analysis from Novetta and tooling built by Moritz Contag, Silas Cutler, and BR Data"
+    reference = "https://www.novetta.com/wp-content/uploads/2015/04/novetta_winntianalysis.pdf"
+    reference = "https://github.com/br-data/2019-winnti-analyse"
+    reference = "https://medium.com/chronicle-blog/winnti-more-than-just-windows-and-gates-e4f03436031a"
+    hash = "7566558469ede04efc665212b45786a730055770f6ea8f924d8c1e324cae8691"
+    hash = "7cd17fc948eb5fa398b8554fea036bdb3c0045880e03acbe532f4082c271e3c5"
+    hash = "63e8ed9692810d562adb80f27bb1aeaf48849e468bf5fd157bc83ca83139b6d7"
+  hash = "79190925bd1c3fae65b0d11db40ac8e61fb9326ccfed9b7e09084b891089602d"
+  condition:
+    pe.overlay.size < 600 and  //look for a moderate sized overlay
+    pe.overlay.size >= 200 and //look for a moderate sized overlay
+    pe.number_of_sections == 6 and  // common Winnti PE feature to narrow our pool
+    pe.number_of_resources == 1 and // common Winnti PE feature to narrow our pool
+    pe.overlay.offset != 0x0 and // verify the overlay does not start at 0x0 (sometimes this happens, unclear why)
+    (
+      for any byte in (pe.overlay.offset .. pe.overlay.offset+40):  //loop over only the first 40 bytes of the overlay
+        (
+    	for any key in (153 .. 255):(  //the key is in the range of 0xa0 to 0xff so check all dems
+    	  ((uint8(byte) ^ key == 0x3a) and (uint8(byte + 1) ^ (key + 1) == 0x38) and (uint8(byte + 2) ^ (key + 2) == 0x30)) or // check that 3 sequential bytes xor'd by 3 incremented keys decode to :80
+    	  ((uint8(byte) ^ key == 0x3a) and (uint8(byte + 1) ^ (key + 1) == 0x35) and (uint8(byte + 2) ^ (key + 2) == 0x33)) or  // check that 3 sequential bytes xor'd by 3 incremented keys decode to :53
+    	  ((uint8(byte) ^ key == 0x3a) and (uint8(byte + 1) ^ (key + 1) == 0x34) and (uint8(byte + 2) ^ (key + 2) == 0x34) and (uint8(byte + 3) ^ (key + 3) == 0x33)) // check that 3 sequential bytes xor'd by 3 incremented keys decode to :443
+    	)
+      )
+    )
+}
+
 rule SUSP_ExchangeTransport_Service_Assembly
 {
   meta:
