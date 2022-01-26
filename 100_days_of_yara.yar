@@ -9,6 +9,63 @@ import "pe"
 import "hash"
 import "math"
 
+rule SUSP_Network_Recon
+{
+  meta:
+    DaysofYARA_day = "26/100"
+    desc = "check for some reconnaissance commands"
+    reference = "https://www.welivesecurity.com/wp-content/uploads/2021/12/eset_jumping_the_air_gap_wp.pdf"
+  strings:
+    $ = "tracert" ascii wide
+    $ = "tasklist" ascii wide
+    $ = "systeminfo" ascii wide
+    $ = "ipconfig" ascii wide
+    $ = "netstat" ascii wide
+    $ = "nbtstat" ascii wide
+    $ = "route" ascii wide
+    $ = "netsh" ascii wide
+  condition:
+    uint16(0) == 0x5a4d and 3 of them
+}
+
+rule SUSP_Network_Recon_b64
+{
+  meta:
+    DaysofYARA_day = "26/100"
+    desc = "check for some reconnaissance commands"
+    reference = "https://www.welivesecurity.com/wp-content/uploads/2021/12/eset_jumping_the_air_gap_wp.pdf"
+  strings:
+    $ = "tracert" base64 base64wide
+    $ = "tasklist" base64 base64wide
+    $ = "systeminfo" base64 base64wide
+    $ = "ipconfig" base64 base64wide
+    $ = "netstat" base64 base64wide
+    $ = "nbtstat" base64 base64wide
+    $ = "route" base64 base64wide
+    $ = "netsh" base64 base64wide
+  condition:
+    uint16(0) == 0x5a4d and 3 of them
+}
+
+rule SUSP_Network_Recon_xor
+{
+  meta:
+    DaysofYARA_day = "26/100"
+    desc = "check for some reconnaissance commands"
+    reference = "https://www.welivesecurity.com/wp-content/uploads/2021/12/eset_jumping_the_air_gap_wp.pdf"
+  strings:
+    $ = "tracert" xor(0x01-0xff)
+    $ = "tasklist" xor(0x01-0xff)
+    $ = "systeminfo" xor(0x01-0xff)
+    $ = "ipconfig" xor(0x01-0xff)
+    $ = "netstat" xor(0x01-0xff)
+    $ = "nbtstat" xor(0x01-0xff)
+    $ = "route" xor(0x01-0xff)
+    $ = "netsh" xor(0x01-0xff)
+  condition:
+    uint16(0) == 0x5a4d and 3 of them
+}
+
 rule MAL_Winnti_Rolling_XOR_BruteForce
 {
   meta:
