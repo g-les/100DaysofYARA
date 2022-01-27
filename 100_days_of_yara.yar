@@ -9,6 +9,43 @@ import "pe"
 import "hash"
 import "math"
 
+rule SUSP_AutoFun
+{
+  meta:
+    DaysofYARA_day = "27/100"
+    desc = "another one based off the ESET paper, checking for references to an autorun file (potentially found on USB-borne malware)"
+    reference = "https://www.welivesecurity.com/wp-content/uploads/2021/12/eset_jumping_the_air_gap_wp.pdf"
+  strings:
+    $= "autorun.inf" nocase ascii wide
+  condition:
+    uint16(0) == 0x5a4d and all of them
+}
+
+
+rule SUSP_AutoFun_b64
+{
+  meta:
+    DaysofYARA_day = "27/100"
+    desc = "another one based off the ESET paper, checking for references to an autorun file (potentially found on USB-borne malware)"
+    reference = "https://www.welivesecurity.com/wp-content/uploads/2021/12/eset_jumping_the_air_gap_wp.pdf"
+  strings:
+    $= "autorun.inf" base64 base64wide
+  condition:
+    uint16(0) == 0x5a4d and all of them
+}
+
+rule SUSP_AutoFun_xor
+{
+  meta:
+    DaysofYARA_day = "27/100"
+    desc = "another one based off the ESET paper, checking for references to an autorun file (potentially found on USB-borne malware)"
+    reference = "https://www.welivesecurity.com/wp-content/uploads/2021/12/eset_jumping_the_air_gap_wp.pdf"
+  strings:
+    $= "autorun.inf" xor(0x01-0xff)
+  condition:
+    uint16(0) == 0x5a4d and all of them
+}
+
 rule SUSP_Network_Recon
 {
   meta:
