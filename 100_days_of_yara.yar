@@ -9,6 +9,30 @@ import "pe"
 import "hash"
 import "math"
 
+rule SUSP_NOP_Sled_PE_RSRC
+{
+  meta:
+    DaysofYARA_day = "28/100"
+    desc = "check for NOP'd bytes at the start of a given resource"
+    reference = "https://community.carbonblack.com/t5/Threat-Advisories-Documents/ROKrat-Technical-Analysis/ta-p/62549"
+  condition:
+    for any resource in pe.resources:
+    (uint32be(resource.offset) == 0x90909090)
+}
+
+
+rule SUSP_NOP_Sled_PE_Overlay
+{
+  meta:
+    DaysofYARA_day = "28/100"
+    desc = "check for NOP'd bytes at the start of the overlay"
+    reference = "https://community.carbonblack.com/t5/Threat-Advisories-Documents/ROKrat-Technical-Analysis/ta-p/62549"
+  condition:
+    pe.overlay.offset != 0 and
+    uint32be(pe.overlay.offset) == 0x90909090
+}
+
+
 rule SUSP_AutoFun
 {
   meta:
