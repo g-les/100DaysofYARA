@@ -9,6 +9,48 @@ import "pe"
 import "hash"
 import "math"
 
+rule SUSP_5_PEs_in_rsrcs
+{ 
+  meta:
+    description = "check if at least five of the resources for a given PE are also PE's"
+    DaysofYARA_day = "29/100"
+  condition:
+    for 5 resource in pe.resources: (
+    uint16(resource.offset) == 0x5a4d )
+}
+
+rule SUSP_4_PEs_in_rsrcs
+{ 
+  meta:
+    description = "check if at least four of the resources for a given PE are also PE's"
+    DaysofYARA_day = "29/100"
+  condition:
+    for 4 resource in pe.resources: (
+    uint16(resource.offset) == 0x5a4d )
+}
+
+
+rule SUSP_3_PEs_in_rsrcs
+{ 
+  meta:
+    description = "check if at least three of the resources for a given PE are also PE's"
+    DaysofYARA_day = "29/100"
+  condition:
+    for 3 resource in pe.resources: (
+    uint16(resource.offset) == 0x5a4d )
+}
+
+rule SUSP_2_PEs_in_rsrcs
+{ 
+  meta:
+    description = "check if at least two of the resources for a given PE are also PE's"
+    DaysofYARA_day = "29/100"
+  condition:
+    for 2 resource in pe.resources: (
+    uint16(resource.offset) == 0x5a4d )
+}
+
+
 rule SUSP_NOP_Sled_PE_RSRC
 {
   meta:
