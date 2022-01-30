@@ -9,6 +9,32 @@ import "pe"
 import "hash"
 import "math"
 
+rule PE_Feature_DLL_Name_Slash {
+  meta:
+    description = "check for a slash character left in the DLL Name portion of the export table - for funsies"
+    DaysofYARA_day = "30/100"
+  condition:
+    pe.dll_name contains "\\"
+}
+
+rule PE_Feature_OriginalFilename_Slash {
+  meta:
+    description = "check for a slash character left in the OriginalFileName portion of version info - for funsies"
+    DaysofYARA_day = "30/100"
+  condition:
+    pe.version_info["OriginalFilename"] contains "\\"
+ }
+
+rule PE_Feature_SectionName_Slash
+ {
+  meta:
+    description = "check for a slash character left in any of the section names - for funsies"
+    DaysofYARA_day = "30/100"
+  condition:
+    for any section in pe.sections: ( section.name contains "\\" )
+ }
+
+
 rule SUSP_5_PEs_in_rsrcs
 { 
   meta:
