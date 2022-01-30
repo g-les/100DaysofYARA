@@ -9,6 +9,26 @@ import "pe"
 import "hash"
 import "math"
 
+rule PE_Feature_RAR_Overlay_not_WinRAR  {
+  meta:
+    description = "check for a RAR file in the overlay (which is normally found in WinRAR PE files) but ignore the WinRAR files to find smuggled RAR's"
+    DaysofYARA_day = "31/100"
+  condition:
+    uint32be(pe.overlay.offset) == 0x52617221
+    and not pe.pdb_path contains "WinRAR"
+}
+
+rule PE_Feature_RAR_RSRC {
+  meta:
+    description = "check for a RAR file in the resources"
+    DaysofYARA_day = "31/100"
+  condition:
+	for any resource in pe.resources : (
+    uint32be(resource.offset) == 0x52617221
+    )
+}
+
+
 rule PE_Feature_DLL_Name_Slash {
   meta:
     description = "check for a slash character left in the DLL Name portion of the export table - for funsies"
