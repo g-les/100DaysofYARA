@@ -23,8 +23,8 @@ rule PE_Feature_RAR_RSRC {
     description = "check for a RAR file in the resources"
     DaysofYARA_day = "31/100"
   condition:
-	for any resource in pe.resources : (
-    uint32be(resource.offset) == 0x52617221
+    for any resource in pe.resources : (
+      uint32be(resource.offset) == 0x52617221
     )
 }
 
