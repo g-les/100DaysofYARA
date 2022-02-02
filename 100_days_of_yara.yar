@@ -9,6 +9,17 @@ import "pe"
 import "hash"
 import "math"
 
+
+rule PE_Feature_Empty_ExportName {
+  meta:
+    description = "check for exported functions that are not named using the new defined keyword"
+    DaysofYARA_day = "33/100"
+    note = "requires YARA v.4.2: https://github.com/VirusTotal/yara/releases/tag/v4.2.0-rc1"
+  condition:
+    for any exp in pe.export_details:
+      (not defined exp.name and defined exp.offset)
+}
+
 rule PE_Feature_RAR_Overlay_not_WinRAR  {
   meta:
     description = "check for a RAR file in the overlay (which is normally found in WinRAR PE files) but ignore the WinRAR files to find smuggled RAR's"
