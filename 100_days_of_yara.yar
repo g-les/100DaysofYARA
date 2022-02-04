@@ -9,6 +9,20 @@ import "pe"
 import "hash"
 import "math"
 
+rule PE_Feature_Empty_RCDATA
+{
+  meta:
+    description = "check for files that have RCDATA resources but don't name them using the new defined keyword"
+    DaysofYARA_day = "35/100"
+    note = "requires YARA v.4.2: https://github.com/VirusTotal/yara/releases/tag/v4.2.0-rc1"
+  condition:
+    for any resource in pe.resources:(
+      resource.type == 10 and
+      not defined resource.name_string and
+      not defined resource.type_string
+    )
+}
+
 rule PE_Feature_Undefined_DLL_Name
 {
   meta:
