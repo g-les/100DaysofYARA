@@ -9,6 +9,7 @@ import "pe"
 import "hash"
 import "math"
 
+
 rule SUSP_PE_MZER_Header_Oddity
 {
   meta:
@@ -17,11 +18,16 @@ rule SUSP_PE_MZER_Header_Oddity
     reference = "https://www.sentinelone.com/labs/wading-through-muddy-waters-recent-activity-of-an-iranian-state-sponsored-threat-actor/"
     DaysofYARA_day = "36/100"
   condition:
-    (uint32be(0x0) == 0x4d5a4552 and uint16be(0x4) == 0xe800) or
-    (uint32be(0x0) == 0x4d5a5245 and uint16be(0x4) == 0xe800) or
-    (uint32be(0x0) == 0x4d5a4152 and uint16be(0x4) == 0xe800)
+    uint16be(0x0) == 0x4d5a and
+    (
+        uint16be(0x2) == 0x4552 or // MZER
+        uint16be(0x2) == 0x5245 or // MZRE
+        uint16be(0x2) == 0x4152    // MZAR
+    ) and
+    uint16be(0x4) == 0xe800
 
 }
+
 
 rule PE_Feature_Empty_RCDATA
 {
