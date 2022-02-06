@@ -9,6 +9,15 @@ import "pe"
 import "hash"
 import "math"
 
+rule SUSP_PE_Shellcode_Call_MZ_Header
+{
+  meta:
+    description = "checking for a likely call to a relative offset (E8) just after the MZ header for a cheeky hiding place for shellcode"
+    reference = "https://malware.news/t/cobaltstrike-beacon-dll-your-no-ordinary-mz-header/34458"
+    DaysofYARA_day = "37/100"
+  condition:
+    uint32be(0x0) == 0x4D5AE800
+}
 
 rule SUSP_PE_MZER_Header_Oddity
 {
