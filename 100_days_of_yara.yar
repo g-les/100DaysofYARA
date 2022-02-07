@@ -9,6 +9,81 @@ import "pe"
 import "hash"
 import "math"
 
+
+rule SUSP_StringRef_NoImport_VirtualAlloc
+{
+  meta:
+    description = "check if an interesting API name is referenced as a string but not imported: VirtualAlloc"
+    DaysofYARA_day = "38/100"
+  strings:
+    $ = "VirtualAlloc" ascii wide
+  condition:
+    all of them and
+    not pe.imports("KERNEL32.dll", "VirtualAlloc")
+}
+
+rule SUSP_StringRef_NoImport_CryptDecrypt
+{
+  meta:
+    description = "check if an interesting API name is referenced as a string but not imported: CryptDecrypt"
+    DaysofYARA_day = "38/100"
+  strings:
+    $ = "CryptDecrypt" ascii wide
+  condition:
+    all of them and
+    not pe.imports("advapi32.dll", "CryptDecrypt")
+}
+
+rule SUSP_StringRef_NoImport_VirtualAlloc_b64
+{
+  meta:
+    description = "check if an interesting API name is referenced as a string but not imported: VirtualAlloc"
+    DaysofYARA_day = "38/100"
+  strings:
+    $ = "VirtualAlloc" base64 base64wide
+  condition:
+    all of them and
+    not pe.imports("KERNEL32.dll", "VirtualAlloc")
+}
+
+rule SUSP_StringRef_NoImport_CryptDecrypt_b64
+{
+  meta:
+    description = "check if an interesting API name is referenced as a string but not imported: CryptDecrypt"
+    DaysofYARA_day = "38/100"
+  strings:
+    $ = "CryptDecrypt" base64 base64wide
+  condition:
+    all of them and
+    not pe.imports("advapi32.dll", "CryptDecrypt")
+}
+
+
+rule SUSP_StringRef_NoImport_VirtualAlloc_xor
+{
+  meta:
+    description = "check if an interesting API name is referenced as a string but not imported: VirtualAlloc"
+    DaysofYARA_day = "38/100"
+  strings:
+    $ = "VirtualAlloc" xor(0x01-0xff)
+  condition:
+    all of them and
+    not pe.imports("KERNEL32.dll", "VirtualAlloc")
+}
+
+
+rule SUSP_StringRef_NoImport_CryptDecrypt_xor
+{
+  meta:
+    description = "check if an interesting API name is referenced as a string but not imported: CryptDecrypt"
+    DaysofYARA_day = "38/100"
+  strings:
+    $ = "CryptDecrypt" xor(0x01-0xff)
+  condition:
+    all of them and
+    not pe.imports("advapi32.dll", "CryptDecrypt")
+}
+
 rule SUSP_PE_Shellcode_Call_MZ_Header
 {
   meta:
