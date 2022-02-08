@@ -9,6 +9,32 @@ import "pe"
 import "hash"
 import "math"
 
+rule PE_Feature_DLL_CVE
+{
+  meta:
+    description = "check for the term CVE left in the DLL Name"
+    DaysofYARA_day = "39/100"
+  condition:
+    pe.dll_name icontains "cve"
+}
+
+rule PE_Feature_OriginalFileName_CVE
+{
+  meta:
+    description = "check for the term CVE left in the OriginalFileName"
+    DaysofYARA_day = "39/100"
+  condition:
+    pe.version_info["OriginalFilename"] icontains "cve"
+}
+
+rule PE_Feature_PBD_CVE
+{
+  meta:
+    description = "check for the term CVE left in the PDB path"
+    DaysofYARA_day = "39/100"
+  condition:
+    pe.pdb_path icontains "cve"
+}
 
 rule SUSP_StringRef_NoImport_VirtualAlloc
 {
