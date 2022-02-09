@@ -9,6 +9,33 @@ import "pe"
 import "hash"
 import "math"
 
+
+rule PE_Feature_DLL_Git
+{
+  meta:
+    description = "check for the term git left in the DLL Name"
+    DaysofYARA_day = "40/100"
+  condition:
+    pe.dll_name icontains "git"
+}
+
+rule PE_Feature_OriginalFileName_Git
+{
+  meta:
+    description = "check for the term git left in the OriginalFileName"
+    DaysofYARA_day = "40/100"
+  condition:
+    pe.version_info["OriginalFilename"] icontains "git"
+}
+rule PE_Feature_PBD_Git
+{
+  meta:
+    description = "check for the term git left in the PDB path"
+    DaysofYARA_day = "40/100"
+  condition:
+    pe.pdb_path icontains "git"
+}
+
 rule PE_Feature_DLL_CVE
 {
   meta:
