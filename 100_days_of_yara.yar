@@ -9,6 +9,38 @@ import "pe"
 import "hash"
 import "math"
 
+rule SUSP_Embedded_PE_at_Section
+{
+  meta:
+    description = "look for sections inside of a PE file that have an MZ header at the start! "
+    DaysofYARA_day = "41/100"
+    reference = "https://twitter.com/ochsenmeier/status/1491445641306062848/photo/1"
+  condition:
+    for any section in pe.sections:
+      (
+      section.raw_data_offset != 0x0 and  // make sure this rule doesn't FP on a section header that doesn't have a raw offset (aka points to 0x0)
+      uint16be(section.raw_data_offset) == 0x4d5a
+      )
+}
+
+rule SUSP_Embedded_Shellcode_at_Section
+{
+  meta:
+    description = "look for sections inside of a PE file that maybe start with shellcode"
+    disclaimer = "NO idea if this will work as expected"
+    DaysofYARA_day = "41/100"
+    reference = "https://twitter.com/ochsenmeier/status/1491445641306062848/photo/1"
+  condition:
+    for any section in pe.sections:
+      (
+      section.raw_data_offset != 0x0 and  // make sure this rule doesn't FP on a section header that is nulled and
+        (
+        uint16(section.raw_data_offset) == 0xE8FC or
+        uint16(section.raw_data_offset) == 0xE800 or
+        uint16(section.raw_data_offset) == 0x00E8
+        )
+      )
+}
 
 rule PE_Feature_DLL_Git
 {
