@@ -9,6 +9,118 @@ import "pe"
 import "hash"
 import "math"
 
+rule SUSP_Mozilla_Proxy_Check
+{
+  meta:
+    description = "check for references to proxy and profile settings used by Mozilla - may indicate a sample is proxy aware"
+    DaysofYARA_day = "43/100"
+  strings:
+    $ = "profiles.ini" ascii wide
+    $ = "network.proxy.http" ascii wide
+  condition:
+    uint16(0) == 0x5A4D and
+    filesize < 5MB and
+    all of them
+}
+
+rule SUSP_Query_HTTPProxy_Data
+{
+  meta:
+    description = "check for references to proxy settings used by Mozilla - may indicate a sample is proxy aware"
+    DaysofYARA_day = "43/100"
+  strings:
+    $ = "network.proxy.http" ascii wide
+  condition:
+    uint16(0) == 0x5A4D and
+    filesize < 5MB and
+    all of them
+}
+
+rule SUSP_Mozilla_Profile_Check
+{
+  meta:
+    description = "check for references to profile settings used by Mozilla"
+    DaysofYARA_day = "43/100"
+  strings:
+    $ = "profiles.ini" ascii wide
+  condition:
+    uint16(0) == 0x5A4D and
+    filesize < 5MB and
+    all of them
+}
+
+
+rule SUSP_Query_HTTPProxy_Data_b64
+{
+  meta:
+    description = "check for references to proxy settings used by Mozilla - may indicate a sample is proxy aware"
+    DaysofYARA_day = "43/100"
+  strings:
+    $ = "network.proxy.http" base64 base64wide
+  condition:
+    uint16(0) == 0x5A4D and
+    filesize < 5MB and
+    all of them
+}
+
+rule SUSP_Query_HTTPProxy_Data_xor
+{
+  meta:
+    description = "check for references to proxy settings used by Mozilla - may indicate a sample is proxy aware"
+    DaysofYARA_day = "43/100"
+  strings:
+    $ = "network.proxy.http" xor(0x01 - 0xff)
+  condition:
+    uint16(0) == 0x5A4D and
+    filesize < 5MB and
+    all of them
+}
+
+
+rule SUSP_Mozilla_Profile_Check
+{
+  meta:
+    description = "check for references to profile settings used by Mozilla"
+    DaysofYARA_day = "43/100"
+  strings:
+    $ = "profiles.ini" ascii wide
+  condition:
+    uint16(0) == 0x5A4D and
+    filesize < 5MB and
+    all of them
+}
+
+rule SUSP_Mozilla_Profile_Check_b64
+{
+  meta:
+    description = "check for references to profile settings used by Mozilla"
+    DaysofYARA_day = "43/100"
+  strings:
+    $ = "profiles.ini" base64 base64wide
+  condition:
+    uint16(0) == 0x5A4D and
+    filesize < 5MB and
+    all of them
+}
+
+
+rule SUSP_Mozilla_Profile_Check__xor
+{
+  meta:
+    description = "check for references to profile settings used by Mozilla"
+    DaysofYARA_day = "43/100"
+  strings:
+    $ = "profiles.ini" xor(0x01 - 0xff)
+  condition:
+    uint16(0) == 0x5A4D and
+    filesize < 5MB and
+    all of them
+}
+
+/*
+Day 42 did not include a shared rule! 
+*/
+
 rule SUSP_Embedded_PE_at_Section
 {
   meta:
