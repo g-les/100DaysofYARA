@@ -9,6 +9,62 @@ import "pe"
 import "hash"
 import "math"
 
+rule SUSP_SvcHost_Start
+{
+  meta:
+    description = "Check for the launching of the generic Svchost to run the a task under the 'normal' netsvcs group in the svchost registry key"
+    reference = "https://nasbench.medium.com/a-deep-dive-into-windows-scheduled-tasks-and-the-processes-running-them-218d1eed4cce"
+    DaysofYARA_day = "44/100"
+  strings:
+    $ = "svchost.exe -k netsvcs" ascii wide nocase
+  condition:
+    all of them
+}
+
+rule SUSP_SvcHost_Start_b64
+{
+  meta:
+    description = "Check for the launching of the generic Svchost to run the a task under the 'normal' netsvcs group in the svchost registry key"
+    reference = "https://nasbench.medium.com/a-deep-dive-into-windows-scheduled-tasks-and-the-processes-running-them-218d1eed4cce"
+    DaysofYARA_day = "44/100"
+  strings:
+    $ = "svchost.exe -k netsvcs" base64 base64wide
+  condition:
+    all of them
+}
+
+rule SUSP_SvcHost_Start_xor
+{
+  meta:
+    description = "Check for the launching of the generic Svchost to run the a task under the 'normal' netsvcs group in the svchost registry key"
+    reference = "https://nasbench.medium.com/a-deep-dive-into-windows-scheduled-tasks-and-the-processes-running-them-218d1eed4cce"
+    DaysofYARA_day = "44/100"
+  strings:
+    $ = "svchost.exe -k netsvcs" xor(0x01-0xff)
+  condition:
+    all of them
+}
+
+rule SUSP_SvcHost_String_Mutations
+{
+  meta:
+    description = "Check for the launching of the generic Svchost to run the a task under the 'normal' netsvcs group in the svchost registry key"
+    reference = "https://nasbench.medium.com/a-deep-dive-into-windows-scheduled-tasks-and-the-processes-running-them-218d1eed4cce"
+    tool = "https://github.com/stairwell-inc/threat-research/tree/main/cerebro-string-mutations"
+    DaysofYARA_day = "44/100"
+  strings:
+    $svchostexe_reverse = "exe.tsohcvs" nocase ascii wide
+    $svchostexeknetsvcs_reverse = "scvsten k- exe.tsohcvs" nocase ascii wide
+
+    $svchostexe_stackpush = "hexehost.hsvch" nocase ascii wide
+    $svchostexeknetsvcs_stackpush = "hcshetsvh-k nhexe host.hsvch" nocase ascii wide
+
+    $svchostexe_flipflop = "vshcso.txee" nocase ascii wide
+    $svchostexeknetsvcs_flipflop = "vshcso.txe ek-n tevssc" nocase ascii wide
+  condition:
+    1 of them
+}
+
 rule SUSP_Mozilla_Proxy_Check
 {
   meta:
