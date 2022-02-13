@@ -65,6 +65,30 @@ rule SUSP_SvcHost_String_Mutations
     1 of them
 }
 
+rule SUSP_stackstring_svchost
+{
+  meta:
+    reference = "https://gist.github.com/notareverser/4f6b9c644d4fe517889b3fbb0b4271ca"
+    description = "Check for the reference of svchost via stack strings"
+    reference = "https://nasbench.medium.com/a-deep-dive-into-windows-scheduled-tasks-and-the-processes-running-them-218d1eed4cce"
+    DaysofYARA_day = "44/100"
+  strings:
+   $smallStack = {c645??73 c645??76 c645??63 c645??68 c645??6f c645??73 c645??74}
+
+   $largeStack = {c7(45|85)[1-4]73000000 c7(45|85)[1-4]76000000 c7(45|85)[1-4]63000000 c7(45|85)[1-4]68000000 c7(45|85)[1-4]6f000000 c7(45|85)[1-4]73000000 c7(45|85)[1-4]74000000}
+
+   $register = {b?73000000 6689???? b?76000000 6689???? b?63000000 6689???? b?68000000 6689???? b?6f000000 6689???? b?73000000 6689???? b?74000000 6689????}
+
+   $dword = {c7(45|85)[1-4]68637673 [0-1]c7(45|85)[1-4]736f [0-1]c6(45|85)[1-4]74}
+
+   $pushpop = {6a735? 6a76 6689????5? 6a63 6689????5? 6a68 6689????5? 6a6f 6689????5? 6a73 6689????5?}
+
+   $callOverString = {e807000000737663686f73745? }
+
+  condition:
+    any of them
+}
+
 rule SUSP_Mozilla_Proxy_Check
 {
   meta:
