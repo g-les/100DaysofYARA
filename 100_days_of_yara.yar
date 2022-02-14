@@ -9,6 +9,94 @@ import "pe"
 import "hash"
 import "math"
 
+
+rule SUSP_Schtasks_Clear
+{
+  meta:
+    description = "detect a plaintext scheduled task string"
+    DaysofYARA_day = "46/100"
+  strings:
+    $schtasks = "schtasks" nocase ascii wide
+  condition:
+    1 of them
+}
+
+rule SUSP_Schtasks_Base64
+{
+  meta:
+    description = "detect a modified scheduled task string"
+    DaysofYARA_day = "46/100"
+  strings:
+    $schtasks = "schtasks" base64 base64wide
+  condition:
+    1 of them
+}
+
+
+rule SUSP_Schtasks_XOR
+{
+  meta:
+    description = "detect a modified scheduled task string"
+    DaysofYARA_day = "46/100"
+  strings:
+    $schtasks = "schtasks" xor(0x01-0xff)
+  condition:
+    1 of them
+}
+
+rule SUSP_Schtasks_String_Mutations_Reverse
+{
+  meta:
+    description = "detect a modified scheduled task string"
+    DaysofYARA_day = "46/100"
+    tool_used = "https://github.com/stairwell-inc/threat-research/tree/main/cerebro-string-mutations"
+  strings:
+    $schtasks_reverse = "sksathcs" nocase ascii wide
+  condition:
+    1 of them
+}
+
+rule SUSP_Schtasks_String_Mutations_FlipFlop
+{
+  meta:
+    description = "detect a modified scheduled task string"
+    DaysofYARA_day = "46/100"
+    tool_used = "https://github.com/stairwell-inc/threat-research/tree/main/cerebro-string-mutations"
+  strings:
+    $schtasks_flipflop = "csthsask" nocase ascii wide
+  condition:
+    1 of them
+}
+
+rule SUSP_Schtasks_String_Mutations_StackPush
+{
+  meta:
+    description = "detect a modified scheduled task string"
+    DaysofYARA_day = "46/100"
+    tool_used = "https://github.com/stairwell-inc/threat-research/tree/main/cerebro-string-mutations"
+  strings:
+    $schtasks_stackpush = "haskshscht" nocase ascii wide
+  condition:
+    1 of them
+}
+
+rule SUSP_Schtasks_String_Mutations_StackStrings
+{
+  meta:
+    description = "detect a modified scheduled task string"
+    DaysofYARA_day = "46/100"
+    tool_used = "https://gist.github.com/notareverser/4f6b9c644d4fe517889b3fbb0b4271ca"
+  strings:
+    $smallStack = {c645??73 c645??63 c645??68 c645??74 c645??61 c645??73 c645??6b c645??73}
+    $largeStack = {c7(45|85)[1-4]73000000 c7(45|85)[1-4]63000000 c7(45|85)[1-4]68000000 c7(45|85)[1-4]74000000 c7(45|85)[1-4]61000000 c7(45|85)[1-4]73000000 c7(45|85)[1-4]6b000000 c7(45|85)[1-4]73000000}
+    $register = {b?73000000 6689???? b?63000000 6689???? b?68000000 6689???? b?74000000 6689???? b?61000000 6689???? b?73000000 6689???? b?6b000000 6689???? b?73000000 6689????}
+    $dword = {c7(45|85)[1-4]74686373 c7(45|85)[1-4]736b7361}
+    $pushpop = {6a735? 6a63 6689????5? 6a68 6689????5? 6a74 6689????5? 6a61 6689????5? 6a73 6689????5? 6a6b 6689????5?}
+    $callOverString = {e8080000007363687461736b735? }
+  condition:
+    any of them
+}
+
 rule MAL_WinDealer_PayloadDecode
 {
   meta:
@@ -94,18 +182,12 @@ rule SUSP_stackstring_svchost
     reference = "https://nasbench.medium.com/a-deep-dive-into-windows-scheduled-tasks-and-the-processes-running-them-218d1eed4cce"
     DaysofYARA_day = "44/100"
   strings:
-   $smallStack = {c645??73 c645??76 c645??63 c645??68 c645??6f c645??73 c645??74}
-
-   $largeStack = {c7(45|85)[1-4]73000000 c7(45|85)[1-4]76000000 c7(45|85)[1-4]63000000 c7(45|85)[1-4]68000000 c7(45|85)[1-4]6f000000 c7(45|85)[1-4]73000000 c7(45|85)[1-4]74000000}
-
-   $register = {b?73000000 6689???? b?76000000 6689???? b?63000000 6689???? b?68000000 6689???? b?6f000000 6689???? b?73000000 6689???? b?74000000 6689????}
-
-   $dword = {c7(45|85)[1-4]68637673 [0-1]c7(45|85)[1-4]736f [0-1]c6(45|85)[1-4]74}
-
-   $pushpop = {6a735? 6a76 6689????5? 6a63 6689????5? 6a68 6689????5? 6a6f 6689????5? 6a73 6689????5?}
-
-   $callOverString = {e807000000737663686f73745? }
-
+    $smallStack = {c645??73 c645??76 c645??63 c645??68 c645??6f c645??73 c645??74}
+    $largeStack = {c7(45|85)[1-4]73000000 c7(45|85)[1-4]76000000 c7(45|85)[1-4]63000000 c7(45|85)[1-4]68000000 c7(45|85)[1-4]6f000000 c7(45|85)[1-4]73000000 c7(45|85)[1-4]74000000}
+    $register = {b?73000000 6689???? b?76000000 6689???? b?63000000 6689???? b?68000000 6689???? b?6f000000 6689???? b?73000000 6689???? b?74000000 6689????}
+    $dword = {c7(45|85)[1-4]68637673 [0-1]c7(45|85)[1-4]736f [0-1]c6(45|85)[1-4]74}
+    $pushpop = {6a735? 6a76 6689????5? 6a63 6689????5? 6a68 6689????5? 6a6f 6689????5? 6a73 6689????5?}
+    $callOverString = {e807000000737663686f73745? }
   condition:
     any of them
 }
