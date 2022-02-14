@@ -9,6 +9,27 @@ import "pe"
 import "hash"
 import "math"
 
+rule MAL_WinDealer_PayloadDecode
+{
+  meta:
+    description = "Detect Steganography technique used by WinDealer to embed & XOR decrypt in an BITMAP resource"
+    DaysofYARA_day = "45/100"
+    hash = "28df5c75a2f78120ff96d4a72a3c23cee97c9b46c96410cf591af38cb4aed0fa"
+    hash = "4a9b37ca2f90bfa90b0b8db8cc80fe01d154ba88e3bc25b00a7f8ff6c509a76f"
+    hash = "b9f526eea625eec1ddab25a0fc9bd847f37c9189750499c446471b7a52204d5a"
+    reference = "https://jsac.jpcert.or.jp/archive/2022/pdf/JSAC2022_7_leon-niwa-ishimaru_en.pdf"
+  condition:
+    uint16(0) == 0x5a4d and filesize < 500KB and
+    for any resource in pe.resources:(
+      resource.id == 129 and
+      for 1 i in (resource.offset + 0x1000 .. resource.offset + 0x1200) :
+        (
+        (uint32be(i) == 0x00600300 or uint32be(i) == 0x00700300) and
+        (uint16be(i+4) ^ uint16be(i+14)) == 0x4d5a
+        )
+    )
+}
+
 rule SUSP_SvcHost_Start
 {
   meta:
