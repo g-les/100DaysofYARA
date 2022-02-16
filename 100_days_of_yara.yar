@@ -10,6 +10,144 @@ import "hash"
 import "math"
 
 
+rule SUSP_ScriptTerms_String_Mutations_StackPush
+{
+  meta:
+    description = " detect a mutation of CScript, WScript, or CreateObject"
+    DaysofYARA_day = "47/100"
+    tool_used = "https://github.com/stairwell-inc/threat-research/tree/main/cerebro-string-mutations"
+  strings:
+    $WScript_stackpush = "hipthWScr" nocase ascii wide
+    $CreateObject_stackpush = "hjecthteObhCrea" nocase ascii wide
+    $CScript_stackpush = "hipthCScr" nocase ascii wide
+  condition:
+    1 of them
+}
+
+rule SUSP_ScriptTerms_String_Mutations_Reverse
+{
+  meta:
+    description = " detect a mutation of CScript, WScript, or CreateObject"
+    DaysofYARA_day = "47/100"
+    tool_used = "https://github.com/stairwell-inc/threat-research/tree/main/cerebro-string-mutations"
+  strings:
+    $WScript_reverse = "tpircSW" nocase ascii wide
+    $CreateObject_reverse = "tcejbOetaerC" nocase ascii wide
+    $CScript_reverse = "tpircSC" nocase ascii wide
+  condition:
+    1 of them
+}
+
+rule SUSP_ScriptTerms_String_Mutations_FlipFlop
+{
+  meta:
+    description = " detect a mutation of CScript, WScript, or CreateObject"
+    DaysofYARA_day = "47/100"
+    tool_used = "https://github.com/stairwell-inc/threat-research/tree/main/cerebro-string-mutations"
+  strings:
+    $WScript_flipflop = "SWrcpit" nocase ascii wide
+    $CreateObject_flipflop = "rCaeetbOejtc" nocase ascii wide
+    $CScript_flipflop = "SCrcpit" nocase ascii wide
+  condition:
+    1 of them
+}
+
+rule SUSP_ScriptTerms_Obfuscation_Base64
+{
+  meta:
+    description = " detect obfuscation of CScript, WScript, or CreateObject"
+    DaysofYARA_day = "47/100"
+  strings:
+    $WScript = "WScript" base64 base64wide
+    $CreateObject = "CreateObject" base64 base64wide
+    $CScript = "CScript" base64 base64wide
+  condition:
+    1 of them
+}
+
+
+rule SUSP_ScriptTerms_Obfuscation_XOR
+{
+  meta:
+    description = " detect obfuscation of CScript, WScript, or CreateObject"
+    DaysofYARA_day = "47/100"
+  strings:
+    $WScript = "WScript" xor(0x01-0xff)
+    $CreateObject = "CreateObject" xor(0x01-0xff)
+    $CScript = "CScript" xor(0x01-0xff)
+  condition:
+    1 of them
+}
+
+rule SUSP_ScriptTerms_Obfuscation_HexEncoded
+{
+  meta:
+    description = "check for script-related strings encoded as hex"
+    DaysofYARA_day = "47/100"
+    tool_used = "https://github.com/stairwell-inc/threat-research/tree/main/cerebro-string-mutations"
+  strings:
+    $wscript_hex_enc_str = "77736372697074" nocase
+    $cscript_hex_enc_str = "63736372697074" nocase
+    $WScript_camel_hex_enc_str = "57536372697074" nocase
+    $CScript_camel_hex_enc_str = "43536372697074" nocase
+    $WSCRIPT_caps_hex_enc_str = "57534352495054" nocase
+    $CSCRIPT_caps_hex_enc_str = "43534352495054" nocase
+    $CreateObject_hex_enc_str = "4372656174654f626a656374" nocase
+  condition:
+    any of them
+}
+
+rule SUSP_ScriptTerms_stackstring_WScript
+{
+  meta:
+    description = "detect WScript being referenced via stack strings"
+    DaysofYARA_day = "47/100"
+  strings:
+    $smallStack = {c645??57 c645??53 c645??63 c645??72 c645??69 c645??70 c645??74}
+    $largeStack = {c7(45|85)[1-4]57000000 c7(45|85)[1-4]53000000 c7(45|85)[1-4]63000000 c7(45|85)[1-4]72000000 c7(45|85)[1-4]69000000 c7(45|85)[1-4]70000000 c7(45|85)[1-4]74000000}
+    $register = {b?57000000 6689???? b?53000000 6689???? b?63000000 6689???? b?72000000 6689???? b?69000000 6689???? b?70000000 6689???? b?74000000 6689????}
+    $dword = {c7(45|85)[1-4]72635357 [0-1]c7(45|85)[1-4]7069 [0-1]c6(45|85)[1-4]74}
+    $pushpop = {6a575? 6a53 6689????5? 6a63 6689????5? 6a72 6689????5? 6a69 6689????5? 6a70 6689????5?}
+    $callOverString = {e807000000575363726970745? }
+  condition:
+    any of them
+}
+
+rule SUSP_ScriptTerms_stackstring_CScript
+{
+  meta:
+    description = "detect CScript being referenced via stack strings"
+    DaysofYARA_day = "46/100"
+  strings:
+    $smallStack = {c645??43 c645??53 c645??63 c645??72 c645??69 c645??70 c645??74}
+    $largeStack = {c7(45|85)[1-4]43000000 c7(45|85)[1-4]53000000 c7(45|85)[1-4]63000000 c7(45|85)[1-4]72000000 c7(45|85)[1-4]69000000 c7(45|85)[1-4]70000000 c7(45|85)[1-4]74000000}
+    $register = {b?43000000 6689???? b?53000000 6689???? b?63000000 6689???? b?72000000 6689???? b?69000000 6689???? b?70000000 6689???? b?74000000 6689????}
+    $dword = {c7(45|85)[1-4]72635343 [0-1]c7(45|85)[1-4]7069 [0-1]c6(45|85)[1-4]74}
+    $pushpop = {6a435? 6a53 6689????5? 6a63 6689????5? 6a72 6689????5? 6a69 6689????5? 6a70 6689????5?}
+    $callOverString = {e807000000435363726970745? }
+
+  condition:
+    any of them
+}
+
+rule SUSP_ScriptTerms_stackstring_CreateObject
+{
+  meta:
+    description = "detect CreatObject being referenced via stack strings"
+    DaysofYARA_day = "46/100"
+    tool_used = "https://gist.github.com/notareverser/4f6b9c644d4fe517889b3fbb0b4271ca"
+  strings:
+    $smallStack = {c645??43 c645??72 c645??65 c645??61 c645??74 c645??65 c645??4f c645??62 c645??6a c645??65 c645??63 c645??74}
+    $largeStack = {c7(45|85)[1-4]43000000 c7(45|85)[1-4]72000000 c7(45|85)[1-4]65000000 c7(45|85)[1-4]61000000 c7(45|85)[1-4]74000000 c7(45|85)[1-4]65000000 c7(45|85)[1-4]4f000000 c7(45|85)[1-4]62000000 c7(45|85)[1-4]6a000000 c7(45|85)[1-4]65000000 c7(45|85)[1-4]63000000 c7(45|85)[1-4]74000000}
+    $register = {b?43000000 6689???? b?72000000 6689???? b?65000000 6689???? b?61000000 6689???? b?74000000 6689???? b?65000000 6689???? b?4f000000 6689???? b?62000000 6689???? b?6a000000 6689???? b?65000000 6689???? b?63000000 6689???? b?74000000 6689????}
+    $dword = {c7(45|85)[1-4]61657243 c7(45|85)[1-4]624f6574 c7(45|85)[1-4]7463656a}
+    $pushpop = {6a435? 6a72 6689????5? 6a65 6689????5? 6a61 6689????5? 6a74 6689????5? 6a65 6689????5? 6a4f 6689????5? 6a62 6689????5? 6a6a 6689????5? 6a65 6689????5? 6a63 6689????5?}
+    $callOverString = {e80c0000004372656174654f626a6563745? }
+  condition:
+    any of them
+}
+
+
 rule SUSP_Schtasks_Clear
 {
   meta:
