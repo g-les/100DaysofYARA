@@ -9,6 +9,20 @@ import "pe"
 import "hash"
 import "math"
 
+rule SUSP_PE_File_Hex_Encoded
+{
+  meta:
+    description = "Check for the bytes typically associated with a PE header, but as strings to detect hex encoding"
+    DaysofYARA_day = "48/100"
+    tool_used = "https://github.com/stairwell-inc/threat-research/pull/7"
+  strings:
+    $ThisProgramCannotBeRuninDOSMode_hexencode = "546869732050726f6772616d2043616e6e6f742042652052756e20696e20444f53204d6f6465"  ascii wide nocase
+    $Program_hexencode = "50726f6772616d" nocase ascii wide
+    $program_hexencode = "70726f6772616d" nocase ascii wide
+    $MZ_HEader_hexencode = "4D5A90000300" nocase ascii wide
+  condition:
+    any of them
+}
 
 rule SUSP_ScriptTerms_String_Mutations_StackPush
 {
