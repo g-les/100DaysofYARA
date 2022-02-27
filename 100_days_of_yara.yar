@@ -9,6 +9,328 @@ import "pe"
 import "hash"
 import "math"
 
+rule PE_Feature_DLL_BIOS
+{
+  meta:
+    description = "check for the term BIOS left in the DLL Name"
+    DaysofYARA_day = "58/100"
+  condition:
+    pe.dll_name icontains "BIOS"
+}
+
+rule PE_Feature_OriginalFileName_BIOS
+{
+  meta:
+    description = "check for the term BIOS left in the OriginalFileName"
+    DaysofYARA_day = "58/100"
+  condition:
+    pe.version_info["OriginalFilename"] icontains "BIOS"
+}
+rule PE_Feature_PBD_BIOS
+{
+  meta:
+    description = "check for the term BIOS left in the PDB path"
+    DaysofYARA_day = "58/100"
+  condition:
+    pe.pdb_path icontains "BIOS"
+}
+
+rule PE_Feature_DLL_UEFI
+{
+  meta:
+    description = "check for the term UEFI left in the DLL Name"
+    DaysofYARA_day = "58/100"
+  condition:
+    pe.dll_name icontains "UEFI"
+}
+
+rule PE_Feature_OriginalFileName_UEFI
+{
+  meta:
+    description = "check for the term UEFI left in the OriginalFileName"
+    DaysofYARA_day = "58/100"
+  condition:
+    pe.version_info["OriginalFilename"] icontains "UEFI"
+}
+rule PE_Feature_PBD_UEFI
+{
+  meta:
+    description = "check for the term UEFI left in the PDB path"
+    DaysofYARA_day = "58/100"
+  condition:
+    pe.pdb_path icontains "UEFI"
+}
+
+rule PE_Feature_DLL_NTFS
+{
+  meta:
+    description = "check for the term NTFS left in the DLL Name"
+    DaysofYARA_day = "58/100"
+  condition:
+    pe.dll_name icontains "NTFS"
+}
+
+rule PE_Feature_OriginalFileName_NTFS
+{
+  meta:
+    description = "check for the term NTFS left in the OriginalFileName"
+    DaysofYARA_day = "58/100"
+  condition:
+    pe.version_info["OriginalFilename"] icontains "NTFS"
+}
+rule PE_Feature_PBD_NTFS
+{
+  meta:
+    description = "check for the term NTFS left in the PDB path"
+    DaysofYARA_day = "58/100"
+  condition:
+    pe.pdb_path icontains "NTFS"
+}
+
+rule PE_Feature_DLL_Boot
+{
+  meta:
+    description = "check for the term Boot left in the DLL Name"
+    DaysofYARA_day = "57/100"
+  condition:
+    pe.dll_name icontains "Boot"
+}
+
+rule PE_Feature_OriginalFileName_Boot
+{
+  meta:
+    description = "check for the term Boot left in the OriginalFileName"
+    DaysofYARA_day = "57/100"
+  condition:
+    pe.version_info["OriginalFilename"] icontains "Boot"
+}
+rule PE_Feature_PBD_Boot
+{
+  meta:
+    description = "check for the term Boot left in the PDB path"
+    DaysofYARA_day = "57/100"
+  condition:
+    pe.pdb_path icontains "Boot"
+}
+
+
+rule SUSP_HTTP_HexEncoded
+{
+  meta:
+    description = "check for HTTP strings encoded as hex"
+    DaysofYARA_day = "56/100"
+  strings:
+    $http_hex_enc_str = "68747470" nocase ascii wide
+    $HTTP_caps_hex_enc_str = "48545450" nocase ascii wide
+    $http_colon_hex_enc_str = "687474703a2f2f" nocase ascii wide
+    $https_hex_enc_str = "48747470733a2f2f" nocase ascii wide
+  condition:
+    any of them
+}
+
+rule SUSP_HTTP_Reverse
+{
+  meta:
+    description = "check for HTTP strings encoded as hex"
+    DaysofYARA_day = "56/100"
+  strings:
+    $ = "//:ptth" ascii wide nocase
+    $ = "//:sptth" ascii wide nocase
+    $ = "ptth" ascii wide nocase
+    $ = "sptth" ascii wide nocase
+  condition:
+    any of them
+}
+
+rule MetaData_Doc_Name_James {
+  meta: 
+    DaysofYARA_day = "55/100"
+  strings: 
+    $ = {1E000000??000000 4a 61 6d 65 73 00 00 00 1E 00}
+  condition: 
+    uint16be(0) == 0xD0CF and 
+    1 of them 
+}
+rule MetaData_Doc_Name_Robert {
+  meta: 
+    DaysofYARA_day = "55/100"
+  strings: 
+    $ = {1E000000??000000 52 6f 62 65 72 74 00 00 1E 00}
+  condition: 
+    uint16be(0) == 0xD0CF and 
+    1 of them 
+}
+
+rule MetaData_Doc_Name_John_WIDE {
+  meta: 
+    DaysofYARA_day = "55/100"
+  strings: 
+    $ = {1E000000??000000 4a 00 6f 00 68 00 6e}
+  condition: 
+    uint16be(0) == 0xD0CF and 
+    1 of them 
+}
+rule MetaData_Doc_Name_Michael {
+  meta: 
+    DaysofYARA_day = "55/100"
+  strings: 
+    $ = {1E000000??000000 4d 69 63 68 61 65 6c 00 1E 00}
+  condition: 
+    uint16be(0) == 0xD0CF and 
+    1 of them 
+}
+rule MetaData_Doc_Name_William {
+  meta: 
+    DaysofYARA_day = "55/100"
+  strings: 
+  $ = {1E000000??000000 57 69 6c 6c 69 61 6d 00 1E 00}
+  condition: 
+    uint16be(0) == 0xD0CF and 
+    1 of them 
+}
+rule MetaData_Doc_Name_David {
+  meta: 
+    DaysofYARA_day = "55/100"
+  strings: 
+    $ = {1E000000??000000 44 61 76 69 64 00 00 00 1E 00}
+  condition: 
+    uint16be(0) == 0xD0CF and 
+    1 of them 
+}
+rule MetaData_Doc_Name_Richard {
+  meta: 
+    DaysofYARA_day = "55/100"
+  strings: 
+    $ = {1E000000??000000 52 69 63 68 61 72 64 00 1E 00}
+  condition: 
+    uint16be(0) == 0xD0CF and 
+    1 of them 
+}
+rule MetaData_Doc_Name_Joseph {
+  meta: 
+    DaysofYARA_day = "55/100"
+  strings: 
+    $ = {1E000000??000000 4a 6f 73 65 70 68 00 00 1E 00}
+  condition: 
+    uint16be(0) == 0xD0CF and 
+    1 of them 
+}
+rule MetaData_Doc_Name_Thomas {
+  meta: 
+    DaysofYARA_day = "55/100"
+  strings: 
+    $ = {1E000000??000000 54 68 6f 6d 61 73 00 00 1E 00}
+  condition: 
+    uint16be(0) == 0xD0CF and 
+    1 of them 
+}
+rule MetaData_Doc_Name_Charles {
+  meta: 
+    DaysofYARA_day = "55/100"
+  strings: 
+    $ = {1E000000??000000 43 68 61 72 6c 65 73 001E00}
+  condition: 
+    uint16be(0) == 0xD0CF and 
+    1 of them 
+}
+
+
+rule MetaData_Doc_Meta_Padding
+{
+  meta:
+    description = "Check for a evidence of blank space padding in metadata of lure documents"
+    DaysofYARA_day = "54/100"
+  strings:
+    $admin = {1E 00 00 00 [0-2] 00 00 20 20 20 20 20 20 20 20 20 20 20 20 20 20 }
+  condition:
+    uint16be(0) == 0xD0CF and
+    1 of them
+
+}
+
+rule MetaData_Doc_Artifact_Adminstrator
+{
+  meta:
+    description = "Check for the term Administrator as part of meta data artifacts"
+    DaysofYARA_day = "53/100"
+  strings:
+    $admin = {1E 00 00 00 ?? 00 00 00 (41|61) 64 6D 69 6E 69 73 74 72 61 74 6F 72 }
+  condition:
+    uint16be(0) == 0xD0CF and
+    1 of them
+
+}
+
+rule MetaData_Doc_Author_x
+{
+  meta:
+    description = "Use metadata markers to detect a single character author field in meta data"
+    disclaimer = "this is imperfect and will false positive! "
+    DaysofYARA_day = "52/100"
+  strings:
+    $x_byte_marker = {1E 00 00 00 ?? 00 00 00 78 00 00 00 1E }
+  condition:
+    uint16be(0) == 0xD0CF and 1 of them
+}
+
+rule MetaData_Doc_Author_z
+{
+  meta:
+    description = "Use metadata markers to detect a single character author field in meta data"
+    disclaimer = "this is imperfect and will false positive! "
+    DaysofYARA_day = "52/100"
+  strings:
+    $x_byte_marker = {1E 00 00 00 ?? 00 00 00 7a 00 00 00 1E }
+  condition:
+    uint16be(0) == 0xD0CF and 1 of them
+}
+
+
+rule MetaData_Doc_Artifact_CommandoVM
+{
+  meta:
+    description = "Check for the term CommandoVM, a common red teaming VM, as part of meta data artifacts"
+    DaysofYARA_day = "51/100"
+  strings:
+    $byte_marker = {1E 00 00 00 ?? 00 00 00 43 6F 6D 6D 61 6E 64 6F 56 4D 00 00 1E 00 00 00 }
+  condition:
+    uint16be(0) == 0xD0CF and 1 of them
+}
+
+
+rule SUSP_ReconCommands_HexEncode
+{
+  meta:
+    description = "check for various recon commands as a hex-encoded string"
+    DaysofYARA_day = "50/100"
+  strings:
+    $tracert_hex_enc_str = "74726163657274" nocase
+    $tasklist_hex_enc_str = "7461736b6c697374" nocase
+    $systeminfo_hex_enc_str = "73797374656d696e666f" nocase
+    $ipconfig_hex_enc_str = "6970636f6e666967" nocase
+    $netstat_hex_enc_str = "6e657473746174" nocase
+    $nbtstat_hex_enc_str = "6e627473746174" nocase
+    $route_hex_enc_str = "726f757465" nocase
+    $netsh_hex_enc_str = "6e65747368" nocase
+  condition:
+    any of them
+}
+
+
+rule SUSP_Powershell_HexEncode
+{
+  meta:
+    description = "check for powershell as a hex-encoded string"
+    DaysofYARA_day = "49/100"
+  strings:
+    $powershell_hex_enc_str = "706f7765727368656c6c" nocase ascii wide
+    $Powershell_hex_enc_str = "506f7765727368656c6c" nocase ascii wide
+    $POWERSHELL_hex_enc_str = "504f5745525348454c4c" nocase ascii wide
+  condition:
+    any of them
+}
+
+
 rule SUSP_PE_File_Hex_Encoded
 {
   meta:
