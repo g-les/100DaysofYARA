@@ -9,6 +9,50 @@ import "pe"
 import "hash"
 import "math"
 
+
+rule SUSP_Scripting_in_Doc_MetaData_PowerShell
+{
+  meta:
+    description = "Check for any case of powershell that starts a Word Doc metadata field"
+    DaysofYARA_day = "59/100"
+    reference = "https://www.varonis.com/blog/detecting-malware-payloads-in-office-document-metadata"
+    hash = "494d681a0a9ac6da891efa26b5e523084ce36a97c9aeefc882be598e35b4ed62"
+  strings:
+    $ = {1E 00 00 00 ?? ?? 00 00 (50|70) (4f|6f) (57|77) (45|65) (52|72) (53|73) (48|68) (45|65) (4c|6c) (4c|6c) }
+  condition:
+    uint16be(0) == 0xD0CF and
+    filesize < 5MB and
+    1 of them
+}
+
+rule SUSP_Scripting_in_Doc_MetaData_MSHTA
+{
+  meta:
+    description = "Check for any case of mshta that starts a Word Doc metadata field"
+    DaysofYARA_day = "59/100"
+    reference = "https://www.varonis.com/blog/detecting-malware-payloads-in-office-document-metadata"
+  strings:
+    $ = {1E 00 00 00 ?? ?? 00 00 (6d|4d) (73|53) (68|48) (74|54) (61|41) }
+  condition:
+    uint16be(0) == 0xD0CF and
+    filesize < 5MB and
+    1 of them
+}
+
+rule SUSP_Scripting_in_Doc_MetaData_WScript
+{
+  meta:
+    description = "Check for any case of WScript that starts a Word Doc metadata field"
+    DaysofYARA_day = "59/100"
+    reference = "https://www.varonis.com/blog/detecting-malware-payloads-in-office-document-metadata"
+  strings:
+    $ = {1E 00 00 00 ?? 00 00 00 (77|57) (73|53) (63|43) (72|52) (69|49) (70|50) (74|54)}// looking for wscript in metadata fields
+  condition:
+    uint16be(0) == 0xD0CF and
+    filesize < 5MB and
+    1 of them
+}
+
 rule PE_Feature_DLL_BIOS
 {
   meta:
