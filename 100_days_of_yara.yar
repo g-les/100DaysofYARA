@@ -9,6 +9,60 @@ import "pe"
 import "hash"
 import "math"
 
+rule MetaData_RTF_Author_Template
+{
+  meta:
+    description = "Template file for RTF meta data - just add your characters from exiftool and throw a curly bracket on the end!"
+    DaysofYARA_day = "60/100"
+  strings:
+    $ = "\\info{\\author " ascii wide //add meta characters and end with } inside the quotes!
+  condition:
+    uint32be(0) == 0x7B5C7274 and uint8(4)== 0x66 and 1 of them
+}
+
+rule MetaData_RTF_Keywords_Template
+{
+  meta:
+    description = "Template file for RTF meta data - just add your characters from exiftool and throw a curly bracket on the end!"
+    DaysofYARA_day = "60/100"
+  strings:
+    $ = "{\\keywords " ascii wide //add meta characters and end with } inside the quotes!
+  condition:
+    uint32be(0) == 0x7B5C7274 and uint8(4)== 0x66 and 1 of them
+}
+rule MetaData_RTF_Comments_Template
+{
+  meta:
+    description = "Template file for RTF meta data - just add your characters from exiftool and throw a curly bracket on the end!"
+    DaysofYARA_day = "60/100"
+  strings:
+        $ = "{\\doccomm " ascii wide //add meta characters and end with } inside the quotes!
+  condition:
+    uint32be(0) == 0x7B5C7274 and uint8(4)== 0x66 and 1 of them
+}
+rule MetaData_RTF_LastModified_Template
+{
+  meta:
+    description = "Template file for RTF meta data - just add your characters from exiftool and throw a curly bracket on the end!"
+    DaysofYARA_day = "60/100"
+  strings:
+    $ = "{\\operator " ascii wide //add meta characters and end with } inside the quotes!
+  condition:
+    uint32be(0) == 0x7B5C7274 and uint8(4)== 0x66 and 1 of them
+}
+
+rule MetaData_RTF_LastModified_test_xpcn
+{
+  meta:
+    description = "check for test_xpcn in the last modified field of RTF"
+    DaysofYARA_day = "60/100"
+    hash = "322bb640d1326b7048174e5cb9cbbcf12cf676dc942e08221556df592287bac4"
+    hash = "4f6b8f51fdaf708bb4fa0dbbc72da50d24f694bce2996eff3df7eeb3c1592e62"
+  strings:
+    $ = "{\\operator test_xpcn}" ascii wide 
+  condition:
+    uint32be(0) == 0x7B5C7274 and uint8(4)== 0x66 and 1 of them
+}
 
 rule SUSP_Scripting_in_Doc_MetaData_PowerShell
 {
