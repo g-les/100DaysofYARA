@@ -13,7 +13,7 @@ import "math"
 rule Reference_DOS_Path_Hd1
 {
   meta:
-    description = "Find reference to DOS Path \\.\Hd1\"
+    description = "Find reference to DOS Path \\.\\Hd1\"
     DaysofYARA_day = "61/100"
   strings:
     $ = "\\\\.\\Hd1\\" nocase ascii wide
@@ -24,7 +24,7 @@ rule Reference_DOS_Path_Hd1
 rule Reference_DOS_Path_Vd1
 {
   meta:
-    description = "Find reference to DOS Path \\.\Vd1 as found in COmRAT"
+    description = "Find reference to DOS Path \\.\\Vd1 as found in COmRAT"
     DaysofYARA_day = "61/100"
   strings:
     $ = "\\\\.\\Vd1" nocase ascii wide
@@ -61,7 +61,7 @@ private rule Reference_DOS_Path_Pipe
 private rule Reference_DOS_Path_winmgmts_root
 {
   meta:
-    description = "Find reference to DOS Path \\.\root as found in FinFisher and In_ter_ception and Sidewider"
+    description = "Find reference to DOS Path \\.\\root as found in FinFisher and In_ter_ception and Sidewider"
     DaysofYARA_day = "61/100"
   strings:
     $ = "\\\\.\\root" ascii wide
@@ -72,7 +72,7 @@ private rule Reference_DOS_Path_winmgmts_root
 rule Reference_DOS_Path_LCD
 {
   meta:
-    description = "Find reference to DOS Path \\.\LCD as found in xHunt"
+    description = "Find reference to DOS Path \\.\\LCD as found in xHunt"
     DaysofYARA_day = "61/100"
   strings:
     $ = "\\\\.\\LCD" ascii wide
@@ -83,7 +83,7 @@ rule Reference_DOS_Path_LCD
 rule Reference_DOS_Path_DISPLAY
 {
   meta:
-    description = "Find reference to DOS Path \\.\DISPLAY"
+    description = "Find reference to DOS Path \\.\\DISPLAY"
     DaysofYARA_day = "61/100"
   strings:
     $ = "\\\\.\\DISPLAY" ascii wide
@@ -94,7 +94,7 @@ rule Reference_DOS_Path_DISPLAY
 rule Reference_DOS_Path_Global
 {
   meta:
-    description = "Find reference to DOS Path \\.\Global as found in DTrack and Carbon and HyperStack"
+    description = "Find reference to DOS Path \\.\\Global as found in DTrack and Carbon and HyperStack"
     DaysofYARA_day = "61/100"
   strings:
     $ = "\\\\.\\Global" ascii wide
@@ -105,7 +105,7 @@ rule Reference_DOS_Path_Global
 rule Reference_DOS_Path_mailslot
 {
   meta:
-    description = "Find reference to DOS Path \\.\mailslot as found in Ramsay"
+    description = "Find reference to DOS Path \\.\\mailslot as found in Ramsay"
     DaysofYARA_day = "61/100"
   strings:
     $ = "\\\\.\\mailslot" ascii wide
@@ -116,7 +116,7 @@ rule Reference_DOS_Path_mailslot
 rule Reference_DOS_Path_RESS_DTDOS
 {
   meta:
-    description = "Find reference to DOS Path \\.\RESS_DTDOS as found in likely SIG31 samples"
+    description = "Find reference to DOS Path \\.\\RESS_DTDOS as found in likely SIG31 samples"
     DaysofYARA_day = "61/100"
   strings:
     $ = "\\\\.\\RESS_DTDOS" ascii wide
@@ -128,7 +128,7 @@ rule Reference_DOS_Path_RESS_DTDOS
 rule Reference_DOS_Path_Netfilter
 {
   meta:
-    description = "Find reference to DOS Path \\.\netfil as found in rootkit samples"
+    description = "Find reference to DOS Path \\.\\netfil as found in rootkit samples"
     DaysofYARA_day = "61/100"
   strings:
     $ = "\\\\.\\netfil" ascii wide
@@ -139,7 +139,7 @@ rule Reference_DOS_Path_Netfilter
 rule Reference_DOS_Path_WMIDataDevice
 {
   meta:
-    description = "Find reference to DOS Path \\.\WMIDataDevice as found in a BlackGear sample"
+    description = "Find reference to DOS Path \\.\\WMIDataDevice as found in a BlackGear sample"
     DaysofYARA_day = "61/100"
   strings:
     $ = "\\\\.\\WMIDataDevice" ascii wide
@@ -151,7 +151,7 @@ rule Reference_DOS_Path_WMIDataDevice
 rule Reference_DOS_Path_EfiMon
 {
   meta:
-    description = "Find reference to DOS Path \\.\EfiMon as found in an Exforel sample"
+    description = "Find reference to DOS Path \\.\\EfiMon as found in an Exforel sample"
     DaysofYARA_day = "61/100"
   strings:
     $ = "\\\\.\\EfiMon" ascii wide
