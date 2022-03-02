@@ -36,7 +36,7 @@ private rule Reference_DOS_Path_PhysicalDrive
 {
   meta:
     description = "Find reference to DOS Path to PhysicalDrive as found in lots of stuff"
-    Find reference to DOS Path _ as found in 
+    DaysofYARA_day = "61/100"
   strings:
     $ = "\\\\.\\PhysicalDrive" nocase ascii wide
   condition:
