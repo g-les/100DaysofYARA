@@ -9,6 +9,18 @@ import "pe"
 import "hash"
 import "math"
 
+rule Reference_DOS_Path_Pipe
+{
+  meta:
+    description = "Find reference to named pipes or blank DOS path strings "
+    DaysofYARA_day = "62/100"
+  strings:
+    $pipe = "\\\\.\\pipe\\" nocase ascii wide
+    $fullword = "\\\\.\\pipe\\" fullword ascii wide
+  condition:
+    $pipe and not $fullword
+
+}
 
 rule Reference_DOS_Path_Hd1
 {
@@ -44,7 +56,7 @@ private rule Reference_DOS_Path_PhysicalDrive
 
 }
 
-private rule Reference_DOS_Path_Pipe
+private rule Reference_DOS_Path_NamedPipe
 {
   meta:
     description = "Find reference to named pipes or blank DOS path strings "
