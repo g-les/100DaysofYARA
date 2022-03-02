@@ -9,6 +9,183 @@ import "pe"
 import "hash"
 import "math"
 
+
+rule Reference_DOS_Path_Hd1
+{
+  meta:
+    description = "Find reference to DOS Path \\.\Hd1\"
+    DaysofYARA_day = "61/100"
+  strings:
+    $ = "\\\\.\\Hd1\\" nocase ascii wide
+  condition:
+    all of them
+}
+
+rule Reference_DOS_Path_Vd1
+{
+  meta:
+    description = "Find reference to DOS Path \\.\Vd1 as found in COmRAT"
+    DaysofYARA_day = "61/100"
+  strings:
+    $ = "\\\\.\\Vd1" nocase ascii wide
+  condition:
+    all of them
+}
+
+private rule Reference_DOS_Path_PhysicalDrive
+{
+  meta:
+    description = "Find reference to DOS Path to PhysicalDrive as found in lots of stuff"
+    Find reference to DOS Path _ as found in 
+  strings:
+    $ = "\\\\.\\PhysicalDrive" nocase ascii wide
+  condition:
+    all of them
+
+}
+
+private rule Reference_DOS_Path_Pipe
+{
+  meta:
+    description = "Find reference to named pipes or blank DOS path strings "
+    DaysofYARA_day = "61/100"
+  strings:
+    $pipe = "\\\\.\\pipe\\" nocase ascii wide
+    $fullword = "\\\\.\\pipe\\" fullword ascii wide
+    $blank = "\\\\.\\" fullword ascii wide
+  condition:
+    1 of them
+
+}
+
+private rule Reference_DOS_Path_winmgmts_root
+{
+  meta:
+    description = "Find reference to DOS Path \\.\root as found in FinFisher and In_ter_ception and Sidewider"
+    DaysofYARA_day = "61/100"
+  strings:
+    $ = "\\\\.\\root" ascii wide
+  condition:
+    all of them
+}
+
+rule Reference_DOS_Path_LCD
+{
+  meta:
+    description = "Find reference to DOS Path \\.\LCD as found in xHunt"
+    DaysofYARA_day = "61/100"
+  strings:
+    $ = "\\\\.\\LCD" ascii wide
+  condition:
+    all of them
+}
+
+rule Reference_DOS_Path_DISPLAY
+{
+  meta:
+    description = "Find reference to DOS Path \\.\DISPLAY"
+    DaysofYARA_day = "61/100"
+  strings:
+    $ = "\\\\.\\DISPLAY" ascii wide
+  condition:
+    all of them
+}
+
+rule Reference_DOS_Path_Global
+{
+  meta:
+    description = "Find reference to DOS Path \\.\Global as found in DTrack and Carbon and HyperStack"
+    DaysofYARA_day = "61/100"
+  strings:
+    $ = "\\\\.\\Global" ascii wide
+  condition:
+    all of them
+}
+
+rule Reference_DOS_Path_mailslot
+{
+  meta:
+    description = "Find reference to DOS Path \\.\mailslot as found in Ramsay"
+    DaysofYARA_day = "61/100"
+  strings:
+    $ = "\\\\.\\mailslot" ascii wide
+  condition:
+    all of them
+}
+
+rule Reference_DOS_Path_RESS_DTDOS
+{
+  meta:
+    description = "Find reference to DOS Path \\.\RESS_DTDOS as found in likely SIG31 samples"
+    DaysofYARA_day = "61/100"
+  strings:
+    $ = "\\\\.\\RESS_DTDOS" ascii wide
+    $ = "\\\\.\\RESSDTDOS" ascii wide
+  condition:
+    any of them
+}
+
+rule Reference_DOS_Path_Netfilter
+{
+  meta:
+    description = "Find reference to DOS Path \\.\netfil as found in rootkit samples"
+    DaysofYARA_day = "61/100"
+  strings:
+    $ = "\\\\.\\netfil" ascii wide
+  condition:
+    all of them
+}
+
+rule Reference_DOS_Path_WMIDataDevice
+{
+  meta:
+    description = "Find reference to DOS Path \\.\WMIDataDevice as found in a BlackGear sample"
+    DaysofYARA_day = "61/100"
+  strings:
+    $ = "\\\\.\\WMIDataDevice" ascii wide
+  condition:
+    all of them
+}
+
+
+rule Reference_DOS_Path_EfiMon
+{
+  meta:
+    description = "Find reference to DOS Path \\.\EfiMon as found in an Exforel sample"
+    DaysofYARA_day = "61/100"
+  strings:
+    $ = "\\\\.\\EfiMon" ascii wide
+  condition:
+    all of them
+}
+
+rule Reference_DOS_Path_Unknown
+{
+  meta:
+    description = "Find reference to uncategorized DOS Paths"
+    DaysofYARA_day = "61/100"
+  strings:
+    $DOSPATH = {5c 5c 2e 5c}
+  condition:
+	all of them
+	and not Reference_DOS_Path_Hd1
+	and not Reference_DOS_Path_PhysicalDrive
+	and not Reference_DOS_Path_Pipe
+	and not Reference_DOS_Path_winmgmts_root
+	and not Reference_DOS_Path_LCD
+	and not Reference_DOS_Path_DISPLAY
+	and not Reference_DOS_Path_Drive
+	and not Reference_DOS_Path_Vd1
+	and not Reference_DOS_Path_mailslot
+	and not Reference_DOS_Path_RESS_DTDOS
+	and not Reference_DOS_Path_Netfilter
+	and not Reference_DOS_Path_Global
+	and not Reference_DOS_Path_WMIDataDevice
+	and not Reference_DOS_Path_EfiMon
+
+}
+
+
 rule MetaData_RTF_Author_Template
 {
   meta:
