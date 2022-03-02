@@ -13,7 +13,7 @@ import "math"
 rule Reference_DOS_Path_Hd1
 {
   meta:
-    description = "Find reference to DOS Path \\.\\Hd1\"
+    description = "Find reference to DOS Path \\.\\Hd1"
     DaysofYARA_day = "61/100"
   strings:
     $ = "\\\\.\\Hd1\\" nocase ascii wide
