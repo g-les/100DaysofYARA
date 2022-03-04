@@ -8,6 +8,36 @@ do some funky stuff with hashing
 import "pe"
 import "hash"
 import "math"
+import "console"
+
+rule SUSP_Empty_Section
+{
+  meta:
+    DaysofYARA_day = "63/100"
+    description = "check across PE for evidence of multiple zero length sections"
+  condition:
+    for 2 section in pe.sections:  (section.raw_data_size == 0)
+}
+
+rule SUSP_Empty_Section_Logger
+{
+  meta:
+    DaysofYARA_day = "63/100"
+    description = "check across PE for evidence of multiple zero length sections"
+  condition:
+    for 2 section in pe.sections:  (section.raw_data_size == 0
+      and console.log("empty section: ", section.name)
+    )
+}
+
+rule SUSP_TINY_Section
+{
+  meta:
+    DaysofYARA_day = "63/100"
+    description = "check across PE for evidence of multiple zero length sections"
+  condition:
+    for any section in pe.sections:  (section.raw_data_size < 100 and section.raw_data_size != 0)
+}
 
 rule Reference_DOS_Path_Pipe
 {
