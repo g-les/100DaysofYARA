@@ -15,8 +15,9 @@ rule SUSP_PE_Header_Oddity_More_Chars
   meta:
     description = "check for PE headers where the prevalence of 0x0 bytes are less than 50%. While this may be indicative of Win32/Win64 samples not having a This Program Cannot Be Run in DOS Mode string, it can also find potentially suspicious things lurking in the header"
     DaysofYARA_day = "64/100"
+    update = "added more robust header check per idea from Florian Roth"
   condition:
-    uint16be(0x0) == 0x4d5a and
+    uint16(0) == 0x5a4d and uint32(uint32(0x3c)) == 0x4550 and
     (math.percentage(0x0, 0x0, 0x40)) < 0.5
 }
 
