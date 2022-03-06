@@ -9,6 +9,30 @@ import "pe"
 import "hash"
 import "math"
 import "console"
+import "dotnet"
+
+rule SUSP_DotNet_Embedded_PE_RSRC
+{
+  meta:
+    description = "detect embedded PEs found in dotnet resources!"
+    DaysofYARA_day = "65/100"
+    author = "Greg Lesnewich"
+  condition:
+    for any resource in dotnet.resources:
+    (uint16be(resource.offset) == 0x4d5a)
+}
+
+
+rule SUSP_DotNet_Embedded_Zip_RSRC
+{
+  meta:
+    description = "detect embedded ZIPs found in dotnet resources!"
+    DaysofYARA_day = "65/100"
+    author = "Greg Lesnewich"
+  condition:
+    for any resource in dotnet.resources:
+    (uint16be(resource.offset) == 0x504B)
+}
 
 rule SUSP_PE_Header_Oddity_More_Chars
 {
