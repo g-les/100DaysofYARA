@@ -11,6 +11,42 @@ import "math"
 import "console"
 import "dotnet"
 
+rule SUSP_Alphabet_LatinChar_Reverse
+{
+  meta:
+    description = "look for latin character set in order, but reversed"
+    DaysofYARA_day = "66/100"
+    author = "Greg Lesnewich"
+  strings:
+    $abcdefghijklmnopqrstuvwxyz_reverse = "zyxwvutsrqponmlkjihgfedcba" nocase ascii wide
+  condition:
+    any of them
+}
+
+rule SUSP_Alphabet_LatinChar_Hex
+{
+  meta:
+    description = "look for latin character set in order, but hex encoded"
+    DaysofYARA_day = "66/100"
+    author = "Greg Lesnewich"
+  strings:
+    $abcdefghijklmnopqrstuvwxyz_hex_enc_str = "6162636465666768696a6b6c6d6e6f707172737475767778797a" nocase
+  condition:
+    any of them
+}
+
+rule SUSP_Alphabet_LatinChar__FlipFlop
+{
+  meta:
+    description = "look for latin character set in order, but flip flopped"
+    DaysofYARA_day = "66/100"
+    author = "Greg Lesnewich"
+  strings:
+    $abcdefghijklmnopqrstuvwxyz_flipflop = "badcfehgjilknmporqtsvuxwzy" nocase ascii wide
+  condition:
+    any of them
+}
+
 rule SUSP_DotNet_Embedded_PE_RSRC
 {
   meta:
