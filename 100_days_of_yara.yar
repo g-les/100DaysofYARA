@@ -11,6 +11,32 @@ import "math"
 import "console"
 import "dotnet"
 
+rule SUSP_PE_Embedded_LZMA_RSRC
+{
+  meta:
+    description = "check for LZMA compressed resources in PE files, inspired by ForensicITGuy analyzing .xll file"
+    reference = "https://twitter.com/ForensicITGuy/status/1499892300713009154"
+    DaysofYARA_day = "67/100"
+    author = "Greg Lesnewich"
+  condition:
+    for any resource in pe.resources: (
+    uint32be(resource.offset) == 0x5D000080
+    )
+}
+
+rule SUSP_DotNet_Embedded_LZMA_RSRC
+{
+  meta:
+    description = "check for LZMA compressed resources in PE files, inspired by ForensicITGuy analyzing .xll file"
+    reference = "https://twitter.com/ForensicITGuy/status/1499892300713009154"
+    DaysofYARA_day = "67/100"
+    author = "Greg Lesnewich"
+  condition:
+    for any resource in dotnet.resources: (
+    uint32be(resource.offset) == 0x5D000080
+    )
+}
+
 rule SUSP_Alphabet_LatinChar_Reverse
 {
   meta:
