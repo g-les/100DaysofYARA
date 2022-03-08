@@ -11,6 +11,20 @@ import "math"
 import "console"
 import "dotnet"
 
+rule SUSP_Alphabet_Rev_LatinChar_Extra_Obf_Hex
+{
+  meta:
+    description = "check for a reversed Latin character alphabet, but more encoded!"
+    DaysofYARA_day = "68/100"
+    author = "Greg Lesnewich"
+  strings:
+    $zyxwvutsrqponmlkjihgfedcba_hex_enc_str = "7a797877767574737271706f6e6d6c6b6a696867666564636261" nocase ascii wide
+    $zyxwvutsrqponmlkjihgfedcba = "zyxwvutsrqponmlkjihgfedcba" base64 base64wide
+  condition:
+    1 of them
+}
+
+
 rule SUSP_PE_Embedded_LZMA_RSRC
 {
   meta:
