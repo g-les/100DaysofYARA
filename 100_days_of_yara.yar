@@ -11,6 +11,19 @@ import "math"
 import "console"
 import "dotnet"
 
+rule Reference_For_Loop
+{
+  meta:
+    description = "check for a reversed Latin character alphabet, but more encoded!"
+    DaysofYARA_day = "69/100"
+    author = "Greg Lesnewich"
+  strings:
+    $for_any_in = {66 6f 72 20 61 6e 79 20 [1-30] 20 69 6e} // for any [variable] in
+    $for_any_in_wide = {66 00 6f 00 72 00 20 00 61 00 6e 00 79 00 20 00 [1-40] 00 20 00 69 00 6e} // for any [variable] in
+  condition:
+    1 of them
+}
+
 rule SUSP_Alphabet_Rev_LatinChar_Extra_Obf_Hex
 {
   meta:
