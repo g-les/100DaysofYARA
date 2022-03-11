@@ -11,6 +11,40 @@ import "math"
 import "console"
 import "dotnet"
 
+rule Context_SSH_Pub_File
+{
+  meta:
+    author = "Greg Lesnewich"
+    DaysofYARA_day = "71/100"
+    description = "check for SSH .pub files via the string ssh- at the start of the file"
+  condition:
+    uint32be(0x0) == 0x7373682D and filesize < 4KB
+}
+
+rule Context_SSH_ID_File
+{
+  meta:
+    author = "GLES, Insikt Group, Recorded Future"
+    DaysofYARA_day = "71/100"
+    description = "check for SSH key files based on the string -----BEGIN.OPENSSH.PRIVATE.KEY----- at the start of the file"
+    tool = "https://labs.inquest.net/tools/yara/iq-uint-trigger"
+  condition:
+    filesize < 4KB and 
+    
+    // check for -----BEGIN.OPENSSH.PRIVATE.KEY----- at 0x0
+    
+    uint32be(0x0) == 0x2d2d2d2d and 
+    uint32be(0x4) == 0x2d424547 and 
+    uint32be(0x8) == 0x494e204f and 
+    uint32be(0xc) == 0x50454e53 and 
+    uint32be(0x10) == 0x53482050 and 
+    uint32be(0x14) == 0x52495641 and 
+    uint32be(0x18) == 0x5445204b and 
+    uint32be(0x1c) == 0x45592d2d and 
+    uint16be(0x20) == 0x2d2d and 
+    uint8(0x22) == 0x2d
+}
+
 rule Context_OpenVPN_Config_File
 {
   meta:
