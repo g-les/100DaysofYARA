@@ -11,6 +11,42 @@ import "math"
 import "console"
 import "dotnet"
 
+rule Context_OpenVPN_Config_File
+{
+  meta:
+    author = "Greg Lesnewich"
+    DaysofYARA_day = "70/100"
+    description = "OpenVPN Config file based on embedded certificates and keys!"
+  strings:
+    $ = "-----BEGIN CERTIFICATE-----" ascii wide
+    $ = "-----BEGIN OpenVPN Static key" ascii wide
+  condition:
+    filesize < 30KB and all of them
+}
+
+rule Context_SoftEther_VPN_Config_File
+{
+  meta:
+    author = "Greg Lesnewich"
+    DaysofYARA_day = "70/100"
+    reference = "https://twitter.com/JWilsonSecurity/status/1501394272658112515"
+    reference = "https://www.softether.org/4-docs/1-manual/3._SoftEther_VPN_Server_Manual/3.3_VPN_Server_Administration#3.3.7_Configuration_File"
+    description = "Find SoftEtherVPN Config file based on embedded types and header check"
+  strings:
+    $ = "byte ServerKey" ascii wide
+    $ = "byte ServerCert" ascii wide
+    $ = "declare ServerConfiguration" ascii wide
+    $ = "bool EtherIP_IPsec " ascii wide
+    $ = "string IPsec_Secret " ascii wide
+    $ = "string L2TP_DefaultHub " ascii wide
+    $ = "bool L2TP_IPsec" ascii wide
+    $ = "bool L2TP_Raw " ascii wide
+  condition:
+    uint32be(0) == 0xEFBBBF23 and
+    filesize < 30KB  and
+    5 of them
+}
+
 rule Reference_For_Loop
 {
   meta:
