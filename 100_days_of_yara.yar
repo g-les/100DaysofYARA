@@ -11,6 +11,33 @@ import "math"
 import "console"
 import "dotnet"
 
+rule SUSP_OLE_File_Appended_Data_4096
+{
+  meta:
+    author = "Greg Lesnewich"
+    DaysofYARA_day = "72/100"
+    description = "check for OLE files that have additional data appended to them based on the extra data not fitting into the implied sector schema"
+    reference = "https://www.decalage.info/en/ole_extradata"
+
+  condition:
+    uint32be(0x0) == 0xd0cf11e0 and uint32be(0x4) == 0xa1b11ae1 and  //OLE file header check
+    uint16(0x1E) == 0x0C and // check that the sector size flag is set to 4096
+    ((filesize%4096) != 0) // check that the remainder of filesize divided by sector size. normal docs would have remainder of 0
+}
+
+rule SUSP_OLE_File_Appended_Data_512
+{
+  meta:
+    author = "Greg Lesnewich"
+    DaysofYARA_day = "72/100"
+    description = "check for OLE files that have additional data appended to them based on the extra data not fitting into the implied sector schema"
+    reference = "https://www.decalage.info/en/ole_extradata"
+  condition:
+    uint32be(0x0) == 0xd0cf11e0 and uint32be(0x4) == 0xa1b11ae1 and //OLE file header check
+    uint16(0x1E) == 0x09 and // check that the sector size flag is set to 512
+    ((filesize%512) != 0) // check that the remainder of filesize divided by sector size. normal docs would have remainder of 0
+}
+
 rule Context_SSH_Pub_File
 {
   meta:
