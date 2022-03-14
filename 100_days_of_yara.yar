@@ -11,6 +11,35 @@ import "math"
 import "console"
 import "dotnet"
 
+rule SUSP_OLE_File_Appended_PE_A
+{
+  meta:
+    author = "Greg Lesnewich"
+    DaysofYARA_day = "73/100"
+    description = "check for PE's in likely appended data of OLE file - 4096 sector size"
+
+  condition:
+    uint32be(0x0) == 0xd0cf11e0 and uint32be(0x4) == 0xa1b11ae1 and
+    uint16(0x1E) == 0x0C and // check that the sector size flag is set to 512
+    ((filesize%4096) != 0) and // check that the remainder of filesize divided by sector size. normal docs would have remainder of 0
+    uint16be(filesize - (filesize%4096)) == 0x4d5a // check that the start of the appended data is a PE
+}
+
+
+rule SUSP_OLE_File_Appended_PE_B
+{
+  meta:
+    author = "Greg Lesnewich"
+    DaysofYARA_day = "73/100"
+    description = "check for PE's in likely appended data of OLE file - 512 sector size"
+
+  condition:
+    uint32be(0x0) == 0xd0cf11e0 and uint32be(0x4) == 0xa1b11ae1 and
+    uint16(0x1E) == 0x09 and // check that the sector size flag is set to 512
+    ((filesize%512) != 0) and // check that the remainder of filesize divided by sector size. normal docs would have remainder of 0
+    uint16be(filesize - (filesize%512)) == 0x4d5a // check that the start of the appended data is a PE
+}
+
 rule SUSP_OLE_File_Appended_Data_4096
 {
   meta:
