@@ -11,6 +11,56 @@ import "math"
 import "console"
 import "dotnet"
 
+rule SUSP_Reference_ADMIN_share
+{
+  meta:
+    author = "Greg Lesnewich"
+    DaysofYARA_day = "74/100"
+    description = "detect references to an ADMIN$ share"
+  strings:
+    $ = "ADMIN$" nocase ascii wide
+  condition:
+    all of them
+}
+
+rule SUSP_Reference_ADMIN_Share_Obf
+{
+  meta:
+    author = "Greg Lesnewich"
+    DaysofYARA_day = "74/100"
+    description = "detect references to an ADMIN$ share"
+  strings:
+    $ADMIN_flipflop = "DAIM$N" nocase ascii wide
+    $ADMIN_reverse = "$NIMDA" nocase ascii wide
+    $ADMIN_hex_enc_str = "41444d494e24" nocase ascii wide
+  condition:
+    any of them
+}
+
+rule SUSP_Reference_ADMIN_share_b64
+{
+  meta:
+    author = "Greg Lesnewich"
+    DaysofYARA_day = "74/100"
+    description = "detect references to an ADMIN$ share"
+  strings:
+    $ = "ADMIN$" base64 base64wide
+  condition:
+    all of them
+}
+
+rule SUSP_Reference_ADMIN_share_xor
+{
+  meta:
+    author = "Greg Lesnewich"
+    DaysofYARA_day = "74/100"
+    description = "detect references to an ADMIN$ share"
+  strings:
+    $ = "ADMIN$" xor(0x01-0xff)
+  condition:
+    all of them
+}
+
 rule SUSP_OLE_File_Appended_PE_A
 {
   meta:
