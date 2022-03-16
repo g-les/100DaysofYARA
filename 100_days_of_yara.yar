@@ -11,6 +11,154 @@ import "math"
 import "console"
 import "dotnet"
 
+rule SUSP_PE_Embedded_Cert
+{
+  meta:
+    author = "Greg Lesnewich"
+    DaysofYARA_day = "76/100"
+    description = "detect executable files that likely have an embedded x509 certificate"
+  strings:
+    $cert = "BEGIN CERTIFICATE" nocase ascii wide
+  condition:
+    uint16(0) == 0x5a4d and any of them
+}
+
+rule SUSP_PE_Embedded_Cert_xor
+{
+  meta:
+    author = "Greg Lesnewich"
+    DaysofYARA_day = "76/100"
+    description = "detect executable files that likely have an embedded x509 certificate"
+  strings:
+    $cert = "BEGIN CERTIFICATE" xor(0x01-0xff)
+  condition:
+    uint16(0) == 0x5a4d and any of them
+}
+
+
+rule SUSP_PE_Embedded_Cert_b64
+{
+  meta:
+    author = "Greg Lesnewich"
+    DaysofYARA_day = "76/100"
+    description = "detect executable files that likely have an embedded x509 certificate"
+  strings:
+    $cert = "BEGIN CERTIFICATE" base64 base64wide
+  condition:
+    uint16(0) == 0x5a4d and any of them
+}
+
+
+rule SUSP_PE_Embedded_Cert_Obfus_FlipFlop
+{
+  meta:
+    author = "Greg Lesnewich"
+    DaysofYARA_day = "76/100"
+    description = "detect executable files that likely have an embedded x509 certificate"
+  strings:
+    $BEGINCERTIFICATE_flipflop = "EBIG NECTRFICITAE" nocase ascii wide
+  condition:
+    uint16(0) == 0x5a4d and any of them
+}
+
+rule SUSP_PE_Embedded_Cert_Obfus_rev
+{
+  meta:
+    author = "Greg Lesnewich"
+    DaysofYARA_day = "76/100"
+    description = "detect executable files that likely have an embedded x509 certificate"
+  strings:
+    $BEGINCERTIFICATE_reverse = "ETACIFITREC NIGEB" nocase ascii wide
+  condition:
+    uint16(0) == 0x5a4d and any of them
+}
+
+rule SUSP_PE_Embedded_Cert_Obfus_hex
+{
+  meta:
+    author = "Greg Lesnewich"
+    DaysofYARA_day = "76/100"
+    description = "detect executable files that likely have an embedded x509 certificate"
+  strings:
+    $BEGINCERTIFICATE_hex_enc_str = "424547494e204345525449464943415445" nocase ascii wide
+  condition:
+    uint16(0) == 0x5a4d and any of them
+}
+
+rule SUSP_ELF_Embedded_Cert
+{
+  meta:
+    author = "Greg Lesnewich"
+    DaysofYARA_day = "76/100"
+    description = "detect executable files that likely have an embedded x509 certificate"
+  strings:
+    $cert = "BEGIN CERTIFICATE" nocase ascii wide
+  condition:
+    uint32(0) == 0x464c457f and any of them
+}
+
+rule SUSP_ELF_Embedded_Cert_xor
+{
+  meta:
+    author = "Greg Lesnewich"
+    DaysofYARA_day = "76/100"
+    description = "detect executable files that likely have an embedded x509 certificate"
+  strings:
+    $cert = "BEGIN CERTIFICATE" xor(0x01-0xff)
+  condition:
+    uint32(0) == 0x464c457f and any of them
+}
+
+
+rule SUSP_ELF_Embedded_Cert_b64
+{
+  meta:
+    author = "Greg Lesnewich"
+    DaysofYARA_day = "76/100"
+    description = "detect executable files that likely have an embedded x509 certificate"
+  strings:
+    $cert = "BEGIN CERTIFICATE" base64 base64wide
+  condition:
+    uint32(0) == 0x464c457f and any of them
+}
+
+
+rule SUSP_ELF_Embedded_Cert_Obfus_FlipFlop
+{
+  meta:
+    author = "Greg Lesnewich"
+    DaysofYARA_day = "76/100"
+    description = "detect executable files that likely have an embedded x509 certificate"
+  strings:
+    $BEGINCERTIFICATE_flipflop = "EBIG NECTRFICITAE" nocase ascii wide
+  condition:
+    uint32(0) == 0x464c457f and any of them
+}
+
+rule SUSP_ELF_Embedded_Cert_Obfus_rev
+{
+  meta:
+    author = "Greg Lesnewich"
+    DaysofYARA_day = "76/100"
+    description = "detect executable files that likely have an embedded x509 certificate"
+  strings:
+    $BEGINCERTIFICATE_reverse = "ETACIFITREC NIGEB" nocase ascii wide
+  condition:
+    uint32(0) == 0x464c457f and any of them
+}
+
+rule SUSP_ELF_Embedded_Cert_Obfus_hex
+{
+  meta:
+    author = "Greg Lesnewich"
+    DaysofYARA_day = "76/100"
+    description = "detect executable files that likely have an embedded x509 certificate"
+  strings:
+    $BEGINCERTIFICATE_hex_enc_str = "424547494e204345525449464943415445" nocase ascii wide
+  condition:
+    uint32(0) == 0x464c457f and any of them
+}
+
 rule SUSP_Reference_NT_Authority
 {
   meta:
