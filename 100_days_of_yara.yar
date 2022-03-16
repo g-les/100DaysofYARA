@@ -11,6 +11,48 @@ import "math"
 import "console"
 import "dotnet"
 
+rule SUSP_Reference_NT_Authority
+{
+  meta:
+    author = "Greg Lesnewich"
+    DaysofYARA_day = "75/100"
+    description = "check for references to the NT AUTHORITY domain"
+    reference = "https://twitter.com/_wald0/status/1167550622851190784"
+  strings:
+    $ = "NT AUTHORITY" nocase ascii wide
+  condition:
+    all of them
+}
+
+rule SUSP_Reference_NetworkService
+{
+  meta:
+    author = "Greg Lesnewich"
+    DaysofYARA_day = "75/100"
+    description = "check for references to NETWORK SERVICE which is a limited service account"
+    reference = "https://docs.microsoft.com/en-us/windows/win32/services/networkservice-account?redirectedfrom=MSDN"
+    reference = "https://www.tiraniddo.dev/2020/04/sharing-logon-session-little-too-much.html?m=1"
+  strings:
+    $ = "NETWORK SERVICE" nocase ascii wide
+  condition:
+    all of them
+}
+
+
+rule SUSP_Reference_svcctl
+{
+  meta:
+    author = "Greg Lesnewich"
+    DaysofYARA_day = "75/100"
+    description = "check for references to the RPC endpoint (svcctl), which is likely referenced to implement remote service creation and administration"
+    reference = "https://twitter.com/netresec/status/1393173263963000833"
+    reference = "https://docs.microsoft.com/en-us/openspecs/windows_protocols/ms-scmr/705b624a-13de-43cc-b8a2-99573da3635f"
+  strings:
+    $ = "svcctl" nocase ascii wide
+  condition:
+    1 of them
+}
+
 rule SUSP_Reference_ADMIN_share
 {
   meta:
