@@ -11,6 +11,26 @@ import "math"
 import "console"
 import "dotnet"
 
+rule SUSP_DotNet_UserStr_CMD
+{
+  meta:
+    description = "look user string reference to PowerShell; may be indicative of command execution"
+    DaysofYARA_day = "78/100"
+    author = "Greg Lesnewich"
+  condition:
+    for any str in dotnet.user_strings: (str icontains "c\x00m\x00d\x00")
+}
+
+rule SUSP_DotNet_UserStr_Powershell
+{
+  meta:
+    description = "look user string reference to PowerShell; may be indicative of command execution"
+    DaysofYARA_day = "78/100"
+    author = "Greg Lesnewich"
+  condition:
+    for any str in dotnet.user_strings: (str icontains "p\x00o\x00w\x00e\x00r\x00s\x00h\x00e\x00l\x00l\x00")
+}
+
 rule SUSP_PE_Embedded_Cert
 {
   meta:
