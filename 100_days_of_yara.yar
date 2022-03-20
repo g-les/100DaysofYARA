@@ -11,6 +11,38 @@ import "math"
 import "console"
 import "dotnet"
 
+rule SUSP_DotNet_Constant_CMD
+{
+  meta:
+    description = "look dotnet constant reference to CMD"
+    DaysofYARA_day = "79/100"
+    author = "Greg Lesnewich"
+  condition:
+    for any constant in dotnet.constants: (constant icontains "c\x00m\x00d\x00")
+}
+
+
+rule SUSP_DotNet_Constant_Powershell
+{
+  meta:
+    description = "look dotnet constant reference to PowerShell"
+    DaysofYARA_day = "79/100"
+    author = "Greg Lesnewich"
+  condition:
+    for any constant in dotnet.constants: (constant icontains "p\x00o\x00w\x00e\x00r\x00s\x00h\x00e\x00l\x00l\x00")
+}
+
+
+rule SUSP_DotNet_Constant_Password
+{
+  meta:
+    description = "look dotnet constant reference to the term password"
+    DaysofYARA_day = "79/100"
+    author = "Greg Lesnewich"
+  condition:
+    for any constant in dotnet.constants: (constant icontains "p\x00a\x00s\x00s\x00w\x00o\x00r\x00d\x00")
+}
+
 rule SUSP_DotNet_UserStr_CMD
 {
   meta:
