@@ -11,6 +11,215 @@ import "math"
 import "console"
 import "dotnet"
 
+rule SUSP_DotNet_ModuleName_Exploit
+{
+  meta:
+    description = "look dotnet module name with suspicious string Exploit"
+    DaysofYARA_day = "81/100"
+    author = "Greg Lesnewich"
+  condition:
+    dotnet.module_name icontains "exploit"
+}
+
+rule SUSP_DotNet_ModuleName_Loader
+{
+  meta:
+    description = "look dotnet module name with suspicious string Loader"
+    DaysofYARA_day = "81/100"
+    author = "Greg Lesnewich"
+  condition:
+    dotnet.module_name icontains "loader"
+}
+
+rule SUSP_DotNet_ModuleName_Backdoor
+{
+  meta:
+    description = "look dotnet module name with suspicious string Backdoor"
+    DaysofYARA_day = "81/100"
+    author = "Greg Lesnewich"
+  condition:
+    dotnet.module_name icontains "backdoor"
+}
+
+rule SUSP_DotNet_AssemblyName_Exploit
+{
+  meta:
+    description = "look dotnet assembly name with suspicious string Exploit"
+    DaysofYARA_day = "81/100"
+    author = "Greg Lesnewich"
+  condition:
+    dotnet.assembly.name icontains "exploit"
+}
+
+rule SUSP_DotNet_AssemblyName_Loader
+{
+  meta:
+    description = "look dotnet assembly name with suspicious string Loader"
+    DaysofYARA_day = "81/100"
+    author = "Greg Lesnewich"
+  condition:
+    dotnet.assembly.name icontains "loader"
+}
+
+rule SUSP_DotNet_AssemblyName_Backdoor
+{
+  meta:
+    description = "look dotnet assembly name with suspicious string Backdoor"
+    DaysofYARA_day = "81/100"
+    author = "Greg Lesnewich"
+  condition:
+    dotnet.assembly.name icontains "backdoor"
+}
+
+
+rule SUSP_DotNet_AssemblyName_stager
+{
+  meta:
+    description = "look dotnet assembly name with suspicious string stager"
+    DaysofYARA_day = "81/100"
+    author = "Greg Lesnewich"
+  condition:
+    dotnet.assembly.name icontains "stager"
+}
+
+
+rule SUSP_DotNet_ModuleName_stager
+{
+  meta:
+    description = "look dotnet module name with suspicious string stager"
+    DaysofYARA_day = "81/100"
+    author = "Greg Lesnewich"
+  condition:
+    dotnet.module_name icontains "stager"
+}
+
+rule SUSP_DotNet_AssemblyName_dropper
+{
+  meta:
+    description = "look dotnet assembly name with suspicious string dropper"
+    DaysofYARA_day = "81/100"
+    author = "Greg Lesnewich"
+  condition:
+    dotnet.assembly.name icontains "dropper"
+}
+
+
+rule SUSP_DotNet_ModuleName_dropper
+{
+  meta:
+    description = "look dotnet module name with suspicious string dropper"
+    DaysofYARA_day = "81/100"
+    author = "Greg Lesnewich"
+  condition:
+    dotnet.module_name icontains "dropper"
+}
+
+rule SUSP_DotNet_AssemblyName_HTTP
+{
+  meta:
+    description = "look dotnet assembly name with suspicious string HTTP"
+    DaysofYARA_day = "81/100"
+    author = "Greg Lesnewich"
+  condition:
+    dotnet.assembly.name icontains "http"
+}
+
+
+rule SUSP_DotNet_ModuleName_HTTP
+{
+  meta:
+    description = "look dotnet module name with suspicious string HTTP"
+    DaysofYARA_day = "81/100"
+    author = "Greg Lesnewich"
+  condition:
+    dotnet.module_name icontains "http"
+}
+
+rule SUSP_DotNet_AssemblyName_SSL
+{
+  meta:
+    description = "look dotnet assembly name with suspicious string SSL"
+    DaysofYARA_day = "81/100"
+    author = "Greg Lesnewich"
+  condition:
+    dotnet.assembly.name icontains "ssl"
+}
+
+
+rule SUSP_DotNet_ModuleName_SSL
+{
+  meta:
+    description = "look dotnet module name with suspicious string SSL"
+    DaysofYARA_day = "81/100"
+    author = "Greg Lesnewich"
+  condition:
+    dotnet.module_name icontains "ssl"
+}
+
+rule SUSP_DotNet_AssemblyName_DNS
+{
+  meta:
+    description = "look dotnet assembly name with suspicious string DNS"
+    DaysofYARA_day = "81/100"
+    author = "Greg Lesnewich"
+  condition:
+    dotnet.assembly.name icontains "dns"
+}
+
+
+rule SUSP_DotNet_ModuleName_DNS
+{
+  meta:
+    description = "look dotnet module name with suspicious string DNS"
+    DaysofYARA_day = "81/100"
+    author = "Greg Lesnewich"
+  condition:
+    dotnet.module_name icontains "dns"
+}
+
+
+rule SUSP_DotNet_AssemblyName_TCP
+{
+  meta:
+    description = "look dotnet assembly name with suspicious string TCP"
+    DaysofYARA_day = "81/100"
+    author = "Greg Lesnewich"
+  condition:
+    dotnet.assembly.name icontains "tcp"
+}
+
+
+rule SUSP_DotNet_ModuleName_TCP
+{
+  meta:
+    description = "look dotnet module name with suspicious string TCP"
+    DaysofYARA_day = "81/100"
+    author = "Greg Lesnewich"
+  condition:
+    dotnet.module_name icontains "tcp"
+}
+
+rule SUSP_DotNet_AssemblyName_SMTP
+{
+  meta:
+    description = "look dotnet assembly name with suspicious string SMTP"
+    DaysofYARA_day = "81/100"
+    author = "Greg Lesnewich"
+  condition:
+    dotnet.assembly.name icontains "smtp"
+}
+
+
+rule SUSP_DotNet_ModuleName_SMTP
+{
+  meta:
+    description = "look dotnet module name with suspicious string SMTP"
+    DaysofYARA_day = "81/100"
+    author = "Greg Lesnewich"
+  condition:
+    dotnet.module_name icontains "smtp"
+}
+
 rule SUSP_DotNet_Stream_Name_Anomaly
 {
   meta:
