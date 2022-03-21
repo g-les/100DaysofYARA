@@ -11,6 +11,23 @@ import "math"
 import "console"
 import "dotnet"
 
+rule SUSP_DotNet_Stream_Name_Anomaly
+{
+  meta:
+    description = "look for oddities in dotnet stream names by ignorning the top 5 most commonly seen"
+    DaysofYARA_day = "80/100"
+    author = "Greg Lesnewich"
+
+  condition:
+    for any stream_name in dotnet.streams:(
+      stream_name.name != "#US" and
+      stream_name.name != "#~" and
+      stream_name.name != "#GUID" and
+      stream_name.name != "#Blob" and
+      stream_name.name != "#Strings"
+    )
+}
+
 rule SUSP_DotNet_Constant_CMD
 {
   meta:
