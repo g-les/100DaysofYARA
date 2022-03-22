@@ -11,6 +11,207 @@ import "math"
 import "console"
 import "dotnet"
 
+rule PE_Feature_DLLName_taskhost
+{
+  meta:
+    description = "look dll name with suspicious string taskhost"
+    DaysofYARA_day = "82/100"
+    author = "Greg Lesnewich"
+  condition:
+    pe.dll_name icontains "taskhost"
+}
+
+rule PE_Feature_DLLName_lsass
+{
+  meta:
+    description = "look dll name with suspicious string lsass"
+    DaysofYARA_day = "82/100"
+    author = "Greg Lesnewich"
+  condition:
+    pe.dll_name icontains "lsass"
+}
+
+rule PE_Feature_DLLName_conhost
+{
+  meta:
+    description = "look dll name with suspicious string conhost"
+    DaysofYARA_day = "82/100"
+    author = "Greg Lesnewich"
+  condition:
+    pe.dll_name icontains "conhost"
+}
+
+rule PE_Feature_DLLName_svchost
+{
+  meta:
+    description = "look dll name with suspicious string svchost"
+    DaysofYARA_day = "82/100"
+    author = "Greg Lesnewich"
+  condition:
+    pe.dll_name icontains "svchost"
+}
+
+rule PE_Feature_PDB_taskhost
+{
+  meta:
+    description = "look PDB path with suspicious string taskhost"
+    DaysofYARA_day = "82/100"
+    author = "Greg Lesnewich"
+  condition:
+    pe.pdb_path icontains "taskhost"
+}
+
+rule PE_Feature_PDB_lsass
+{
+  meta:
+    description = "look PDB path with suspicious string lsass"
+    DaysofYARA_day = "82/100"
+    author = "Greg Lesnewich"
+  condition:
+    pe.pdb_path icontains "lsass"
+}
+
+rule PE_Feature_PDB_conhost
+{
+  meta:
+    description = "look PDB path with suspicious string conhost"
+    DaysofYARA_day = "82/100"
+    author = "Greg Lesnewich"
+  condition:
+    pe.pdb_path icontains "conhost"
+}
+
+rule PE_Feature_PDB_svchost
+{
+  meta:
+    description = "look PDB path with suspicious string svchost"
+    DaysofYARA_day = "82/100"
+    author = "Greg Lesnewich"
+  condition:
+    pe.pdb_path icontains "svchost"
+}
+
+rule PE_Feature_OriginalFilename_taskhost
+{
+  meta:
+    description = "look for Original Filename with suspicious string taskhost"
+    DaysofYARA_day = "82/100"
+    author = "Greg Lesnewich"
+  condition:
+    pe.version_info["OriginalFilename"] icontains "taskhost"
+}
+
+rule PE_Feature_OriginalFilename_lsass
+{
+  meta:
+    description = "look for Original Filename with suspicious string lsass"
+    DaysofYARA_day = "82/100"
+    author = "Greg Lesnewich"
+  condition:
+    pe.version_info["OriginalFilename"] icontains "lsass"
+}
+
+rule PE_Feature_OriginalFilename_conhost
+{
+  meta:
+    description = "look for Original Filename with suspicious string conhost"
+    DaysofYARA_day = "82/100"
+    author = "Greg Lesnewich"
+  condition:
+    pe.version_info["OriginalFilename"] icontains "conhost"
+}
+
+rule PE_Feature_OriginalFilename_svchost
+{
+  meta:
+    description = "look for Original Filename with suspicious string svchost"
+    DaysofYARA_day = "82/100"
+    author = "Greg Lesnewich"
+  condition:
+    pe.version_info["OriginalFilename"] icontains "svchost"
+}
+
+
+rule SUSP_DotNet_AssemblyName_taskhost
+{
+  meta:
+    description = "look dotnet assembly name with suspicious string taskhost"
+    DaysofYARA_day = "82/100"
+    author = "Greg Lesnewich"
+  condition:
+    dotnet.assembly.name icontains "taskhost"
+}
+
+rule SUSP_DotNet_AssemblyName_lsass
+{
+  meta:
+    description = "look dotnet assembly name with suspicious string lsass"
+    DaysofYARA_day = "82/100"
+    author = "Greg Lesnewich"
+  condition:
+    dotnet.assembly.name icontains "lsass"
+}
+
+rule SUSP_DotNet_AssemblyName_conhost
+{
+  meta:
+    description = "look dotnet assembly name with suspicious string conhost"
+    DaysofYARA_day = "82/100"
+    author = "Greg Lesnewich"
+  condition:
+    dotnet.assembly.name icontains "conhost"
+}
+
+rule SUSP_DotNet_AssemblyName_svchost
+{
+  meta:
+    description = "look dotnet assembly name with suspicious string svchost"
+    DaysofYARA_day = "82/100"
+    author = "Greg Lesnewich"
+  condition:
+    dotnet.assembly.name icontains "svchost"
+}
+
+rule SUSP_DotNet_ModuleName_taskhost
+{
+  meta:
+    description = "look dotnet module name with suspicious string taskhost"
+    DaysofYARA_day = "82/100"
+    author = "Greg Lesnewich"
+  condition:
+    dotnet.module_name icontains "taskhost"
+}
+
+rule SUSP_DotNet_ModuleName_lsass
+{
+  meta:
+    description = "look dotnet module name with suspicious string lsass"
+    DaysofYARA_day = "82/100"
+    author = "Greg Lesnewich"
+  condition:
+    dotnet.module_name icontains "lsass"
+}
+
+rule SUSP_DotNet_ModuleName_conhost
+{
+  meta:
+    description = "look dotnet module name with suspicious string conhost"
+    DaysofYARA_day = "82/100"
+    author = "Greg Lesnewich"
+  condition:
+    dotnet.module_name icontains "conhost"
+}
+
+rule SUSP_DotNet_ModuleName_svchost
+{
+  meta:
+    description = "look dotnet module name with suspicious string svchost"
+    DaysofYARA_day = "82/100"
+    author = "Greg Lesnewich"
+  condition:
+    dotnet.module_name icontains "svchost"
+}
+
 rule SUSP_DotNet_ModuleName_Exploit
 {
   meta:
