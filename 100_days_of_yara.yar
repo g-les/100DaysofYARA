@@ -11,6 +11,397 @@ import "math"
 import "console"
 import "dotnet"
 
+rule SUSP_Dotnet_RSRC_Name_crypt
+{
+  meta:
+    description = "look for dotnet resource names containing crypt"
+    DaysofYARA_day = "83/100"
+    author = "Greg Lesnewich"
+
+  condition:
+    for any item in dotnet.resources: (
+        item.name icontains "crypt"
+        )
+
+}
+
+rule SUSP_Dotnet_RSRC_Name_backdoor
+{
+  meta:
+    description = "look for dotnet resource names containing backdoor"
+    DaysofYARA_day = "83/100"
+    author = "Greg Lesnewich"
+
+  condition:
+    for any item in dotnet.resources: (
+        item.name icontains "backdoor"
+        )
+
+}
+
+rule SUSP_Dotnet_RSRC_Name_hacker
+{
+  meta:
+    description = "look for dotnet resource names containing hacker"
+    DaysofYARA_day = "83/100"
+    author = "Greg Lesnewich"
+
+  condition:
+    for any item in dotnet.resources: (
+        item.name icontains "hacker"
+        )
+
+}
+
+rule SUSP_Dotnet_RSRC_Name_loader
+{
+  meta:
+    description = "look for dotnet resource names containing loader"
+    DaysofYARA_day = "83/100"
+    author = "Greg Lesnewich"
+
+  condition:
+    for any item in dotnet.resources: (
+        item.name icontains "loader"
+        )
+
+}
+
+rule SUSP_Dotnet_RSRC_Name_locker
+{
+  meta:
+    description = "look for dotnet resource names containing locker"
+    DaysofYARA_day = "83/100"
+    author = "Greg Lesnewich"
+
+  condition:
+    for any item in dotnet.resources: (
+        item.name icontains "locker"
+        )
+
+}
+
+rule SUSP_Dotnet_RSRC_Name_ransom
+{
+  meta:
+    description = "look for dotnet resource names containing ransom"
+    DaysofYARA_day = "83/100"
+    author = "Greg Lesnewich"
+
+  condition:
+    for any item in dotnet.resources: (
+        item.name icontains "ransom"
+        )
+
+}
+
+rule SUSP_Dotnet_RSRC_Name_http
+{
+  meta:
+    description = "look for dotnet resource names containing http"
+    DaysofYARA_day = "83/100"
+    author = "Greg Lesnewich"
+
+  condition:
+    for any item in dotnet.resources: (
+        item.name icontains "http"
+        )
+
+}
+
+rule SUSP_Dotnet_RSRC_Name_dns
+{
+  meta:
+    description = "look for dotnet resource names containing dns"
+    DaysofYARA_day = "83/100"
+    author = "Greg Lesnewich"
+
+  condition:
+    for any item in dotnet.resources: (
+        item.name icontains "dns"
+        )
+}
+
+rule SUSP_Dotnet_RSRC_Name_0day
+{
+  meta:
+    description = "look for dotnet resource names containing "
+    DaysofYARA_day = "83/100"
+    author = "Greg Lesnewich"
+
+  condition:
+   for any item in dotnet.resources: (
+       item.name icontains "0day"
+    )
+
+}
+
+rule SUSP_Dotnet_RSRC_Name_binary
+{
+  meta:
+    description = "look for dotnet resource names containing "
+    DaysofYARA_day = "83/100"
+    author = "Greg Lesnewich"
+
+  condition:
+   for any item in dotnet.resources: (
+       item.name icontains "binary"
+    )
+
+}
+
+rule SUSP_Dotnet_RSRC_Name_bypass
+{
+  meta:
+    description = "look for dotnet resource names containing "
+    DaysofYARA_day = "83/100"
+    author = "Greg Lesnewich"
+
+  condition:
+   for any item in dotnet.resources: (
+       item.name icontains "bypass"
+    )
+
+}
+
+rule SUSP_Dotnet_RSRC_Name_cve
+{
+  meta:
+    description = "look for dotnet resource names containing "
+    DaysofYARA_day = "83/100"
+    author = "Greg Lesnewich"
+
+  condition:
+   for any item in dotnet.resources: (
+       item.name icontains "cve-"
+    )
+
+}
+
+rule SUSP_Dotnet_RSRC_Name_hook
+{
+  meta:
+    description = "look for dotnet resource names containing hook"
+    DaysofYARA_day = "83/100"
+    author = "Greg Lesnewich"
+
+  condition:
+   for any item in dotnet.resources: (
+       item.name icontains "hook"
+    )
+
+}
+
+rule SUSP_Dotnet_RSRC_Name_inject
+{
+  meta:
+    description = "look for dotnet resource names containing inject"
+    DaysofYARA_day = "83/100"
+    author = "Greg Lesnewich"
+
+  condition:
+   for any item in dotnet.resources: (
+       item.name icontains "inject"
+    )
+
+}
+
+rule SUSP_Dotnet_RSRC_Name_katz
+{
+  meta:
+    description = "look for dotnet resource names containing katz"
+    DaysofYARA_day = "83/100"
+    author = "Greg Lesnewich"
+
+  condition:
+   for any item in dotnet.resources: (
+       item.name icontains "katz"
+    )
+
+}
+
+rule SUSP_Dotnet_RSRC_Name_keylog
+{
+  meta:
+    description = "look for dotnet resource names containing keylog"
+    DaysofYARA_day = "83/100"
+    author = "Greg Lesnewich"
+
+  condition:
+   for any item in dotnet.resources: (
+       item.name icontains "keylog"
+    )
+
+}
+
+rule SUSP_Dotnet_RSRC_Name_mimikatz
+{
+  meta:
+    description = "look for dotnet resource names containing mimikatz"
+    DaysofYARA_day = "83/100"
+    author = "Greg Lesnewich"
+
+  condition:
+   for any item in dotnet.resources: (
+       item.name icontains "mimikatz"
+    )
+
+}
+
+rule SUSP_Dotnet_RSRC_Name_obfuscat
+{
+  meta:
+    description = "look for dotnet resource names containing obfuscat"
+    DaysofYARA_day = "83/100"
+    author = "Greg Lesnewich"
+
+  condition:
+   for any item in dotnet.resources: (
+       item.name icontains "obfuscat"
+    )
+
+}
+
+rule SUSP_Dotnet_RSRC_Name_overflow
+{
+  meta:
+    description = "look for dotnet resource names containing overflow"
+    DaysofYARA_day = "83/100"
+    author = "Greg Lesnewich"
+
+  condition:
+   for any item in dotnet.resources: (
+       item.name icontains "overflow"
+    )
+
+}
+
+rule SUSP_Dotnet_RSRC_Name_payload
+{
+  meta:
+    description = "look for dotnet resource names containing payload"
+    DaysofYARA_day = "83/100"
+    author = "Greg Lesnewich"
+
+  condition:
+   for any item in dotnet.resources: (
+       item.name icontains "payload"
+    )
+
+}
+
+rule SUSP_Dotnet_RSRC_Name_reflect
+{
+  meta:
+    description = "look for dotnet resource names containing reflect"
+    DaysofYARA_day = "83/100"
+    author = "Greg Lesnewich"
+
+  condition:
+   for any item in dotnet.resources: (
+       item.name icontains "reflect"
+    )
+
+}
+
+rule SUSP_Dotnet_RSRC_Name_registry
+{
+  meta:
+    description = "look for dotnet resource names containing registry"
+    DaysofYARA_day = "83/100"
+    author = "Greg Lesnewich"
+
+  condition:
+   for any item in dotnet.resources: (
+       item.name icontains "registry"
+    )
+
+}
+
+rule SUSP_Dotnet_RSRC_Name_rootkit
+{
+  meta:
+    description = "look for dotnet resource names containing rootkit"
+    DaysofYARA_day = "83/100"
+    author = "Greg Lesnewich"
+
+  condition:
+   for any item in dotnet.resources: (
+       item.name icontains "rootkit"
+    )
+
+}
+
+rule SUSP_Dotnet_RSRC_Name_shell
+{
+  meta:
+    description = "look for dotnet resource names containing shell"
+    DaysofYARA_day = "83/100"
+    author = "Greg Lesnewich"
+
+  condition:
+   for any item in dotnet.resources: (
+       item.name icontains "shell"
+    )
+
+}
+
+rule SUSP_Dotnet_RSRC_Name_steal
+{
+  meta:
+    description = "look for dotnet resource names containing steal"
+    DaysofYARA_day = "83/100"
+    author = "Greg Lesnewich"
+
+  condition:
+   for any item in dotnet.resources: (
+       item.name icontains "steal"
+    )
+
+}
+
+rule SUSP_Dotnet_RSRC_Name_x32
+{
+  meta:
+    description = "look for dotnet resource names containing x32"
+    DaysofYARA_day = "83/100"
+    author = "Greg Lesnewich"
+
+  condition:
+   for any item in dotnet.resources: (
+       item.name icontains "x32"
+    )
+
+}
+
+rule SUSP_Dotnet_RSRC_Name_x64
+{
+  meta:
+    description = "look for dotnet resource names containing x64"
+    DaysofYARA_day = "83/100"
+    author = "Greg Lesnewich"
+
+  condition:
+   for any item in dotnet.resources: (
+       item.name icontains "x64"
+    )
+
+}
+
+rule SUSP_Dotnet_RSRC_Name_x86
+{
+  meta:
+    description = "look for dotnet resource names containing x86"
+    DaysofYARA_day = "83/100"
+    author = "Greg Lesnewich"
+
+  condition:
+   for any item in dotnet.resources: (
+       item.name icontains "x86"
+    )
+
+}
+
 rule PE_Feature_DLLName_taskhost
 {
   meta:
