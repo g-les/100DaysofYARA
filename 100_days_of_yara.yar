@@ -11,6 +11,16 @@ import "math"
 import "console"
 import "dotnet"
 
+rule SUSP_PE_NonStandard_Number_Data_Dirs
+{
+  meta:
+    description = "look for PE's that do not have the 'normal' number of data directories"
+    DaysofYARA_day = "84/100"
+    author = "Greg Lesnewich"
+  condition:
+    pe.number_of_rva_and_sizes != 16
+}
+
 rule SUSP_Dotnet_RSRC_Name_crypt
 {
   meta:
