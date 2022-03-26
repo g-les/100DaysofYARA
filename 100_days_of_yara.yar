@@ -11,6 +11,29 @@ import "math"
 import "console"
 import "dotnet"
 
+rule APT_CN_BlackTech_TSCookie_Embedded_DLL
+{
+  meta:
+    description = "looking for BlackTech's TSCookie based on loading of RC4 key; use console to print out the key "
+    DaysofYARA_day = "85/100"
+    author = "Greg Lesnewich"
+    reference = "https://blogs.jpcert.or.jp/en/2019/05/tscookie3.html"
+    reference = "https://github.com/JPCERTCC/aa-tools/blob/master/tscookie_decode.py"
+  strings:
+    $lea_rc4 = { 80 68 80 00 00 00 50 C7 40 ?? ?? ?? ?? ?? } // loading RC4 key
+        //LEA        EAX,[EBX + ESI*0x1 + -0x80]
+        //PUSH       0x80
+        //PUSH       EAX
+        //MOV        dword ptr [EAX + 0x7c],0x5d765a92
+
+  condition:
+    uint16(0) == 0x5a4d
+    and filesize < 1500KB
+    and all of them
+    and console.hex("RC4 Key: ", uint32be(@lea_rc4+9))
+
+}
+
 rule SUSP_PE_NonStandard_Number_Data_Dirs
 {
   meta:
