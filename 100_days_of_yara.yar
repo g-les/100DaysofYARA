@@ -11,6 +11,22 @@ import "math"
 import "console"
 import "dotnet"
 
+rule SUSP_Keylogging_Imports {
+  meta:
+    description = "look for PE's that contain likely keylogging APIs"
+    DaysofYARA_day = "86/100"
+    author = "Greg Lesnewich"
+  strings:
+    $ = "OpenClipboard" ascii wide
+    $ = "GetClipboardData" ascii wide
+    $ = "CloseClipBoard" ascii wide
+    $ = "GetKeyState" ascii wide
+    $ = "GetAsyncKey" ascii wide
+  condition:
+    uint16(0) == 0x5a4d and
+    4 of them
+}
+
 rule APT_CN_BlackTech_TSCookie_Embedded_DLL
 {
   meta:
