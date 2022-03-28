@@ -5,6 +5,28 @@ use math module beyond general entropy of a section / resource
 position specific things beyond what PE module tells us
 do some funky stuff with hashing
 */
+
+
+import "pe"
+
+rule imphash_rule
+{
+  meta:
+     description = "when trying to detect samples using imphash make sure to enter the lowercase value of the imphash, otherwise yara won't recogonize it."
+     author = "beemparthiban"
+     DaysofYARAday = "85/100"
+     date = "2022-26-03"
+     
+  strings:
+     $a1 = "sdf"
+     $a2 = "fdgfd"
+     
+  confition:
+     uint16(0) == 0x5a4d and filesize < 1MB and
+     pe.imphash() == "abdlkdhfdgkdzghkgdzfkgaskj" // just a dummy value and all of them
+ }
+
+
 import "pe"
 import "hash"
 import "math"
