@@ -11,6 +11,25 @@ import "math"
 import "console"
 import "dotnet"
 
+rule MAL_HeaderTip_Loader_Resource {
+  meta:
+    description = "look for PE's with 3 RCDATA resources that start with odd padding and have similar embedded filenames "
+    DaysofYARA_day = "86/100"
+    author = "Greg Lesnewich"
+    hash = "042271aadf2191749876fc99997d0e6bdd3b89159e7ab8cd11a9f13ae65fa6b1"
+    reference = "https://cert.gov.ua/article/38097"
+    reference = "https://twitter.com/TomHegel/status/1506393655866802191"
+    reference = "https://twitter.com/aRtAGGI/status/1506010831221248002"
+    reference = "https://twitter.com/h2jazi/status/1505887653111209994"
+  condition:
+    pe.number_of_resources > 8 and
+    for 3 resource in pe.resources:(
+        resource.type == 10 and
+        uint32be(resource.offset) == 0x5000000
+    ) and
+    uint32be(pe.resources[9].offset + 0x4) == uint32be(pe.resources[10].offset + 0x4)
+}
+
 rule SUSP_Keylogging_Imports {
   meta:
     description = "look for PE's that contain likely keylogging APIs"
