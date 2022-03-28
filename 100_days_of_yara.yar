@@ -6,10 +6,13 @@ position specific things beyond what PE module tells us
 do some funky stuff with hashing
 */
 
-
 import "pe"
+import "hash"
+import "math"
+import "console"
+import "dotnet"
 
-rule imphash_rule
+rule Example_imphash_rule
 {
   meta:
      description = "when trying to detect samples using imphash make sure to enter the lowercase value of the imphash, otherwise yara won't recogonize it."
@@ -23,15 +26,10 @@ rule imphash_rule
      
   confition:
      uint16(0) == 0x5a4d and filesize < 1MB and
-     pe.imphash() == "abdlkdhfdgkdzghkgdzfkgaskj" // just a dummy value and all of them
+     pe.imphash() == "abdlkdhfdgkdzghkgdzfkgaskj" // just a dummy value 
+     and all of them
  }
 
-
-import "pe"
-import "hash"
-import "math"
-import "console"
-import "dotnet"
 
 rule MAL_HeaderTip_Loader_Resource {
   meta:
