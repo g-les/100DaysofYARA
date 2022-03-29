@@ -12,6 +12,25 @@ import "math"
 import "console"
 import "dotnet"
 
+//rule _broken_dont_run_SUSP_ResourceNames_QakBot_Configs
+//{
+//  meta:
+//    description = " -- warning -- does not work as expected! it intends to check for odd resource name or type strings that may indicate an unpacked QakBot sample"
+//    DaysofYARA_day = "88/100"
+//    author = "Greg Lesnewich"
+//    reference = "https://mobile.twitter.com/kienbigmummy/status/1507247911801073668"
+//  condition:
+//    for any resource in pe.resources:(
+//        resource.type == 10 and (resource.name_string == "1\x008\x002\x007\x000\x00D\x002\x00E\x00" or
+//        resource.type_string == "1\x008\x002\x007\x000\x00D\x002\x00E\x00")
+//    ) and
+//        for any resource in pe.resources:(
+//            resource.type == 10 and (resource.name_string == "2\x006\x00F\x005\x001\x007\x00A\x00B\x00" or
+//            resource.type_string == "2\x006\x00F\x005\x001\x007\x00A\x00B\x00")
+//        )
+//
+//}
+
 rule Example_imphash_rule
 {
   meta:
@@ -34,7 +53,7 @@ rule Example_imphash_rule
 rule MAL_HeaderTip_Loader_Resource {
   meta:
     description = "look for PE's with 3 RCDATA resources that start with odd padding and have similar embedded filenames "
-    DaysofYARA_day = "86/100"
+    DaysofYARA_day = "87/100"
     author = "Greg Lesnewich"
     hash = "042271aadf2191749876fc99997d0e6bdd3b89159e7ab8cd11a9f13ae65fa6b1"
     reference = "https://cert.gov.ua/article/38097"
