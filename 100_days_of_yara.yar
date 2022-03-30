@@ -12,6 +12,35 @@ import "math"
 import "console"
 import "dotnet"
 
+rule ELF_Feature_DynSym_chmod
+{
+  meta:
+    description = "check for dynamic symbol chmod that can change a file's permissions"
+    DaysofYARA_day = "89/100"
+    author = "Greg Lesnewich"
+    reference = "https://man7.org/linux/man-pages/man2/chmod.2.html"
+    reference = "https://blogs.oracle.com/solaris/post/inside-elf-symbol-tables"
+  condition:
+    for any thing in elf.dynsym: (
+      thing.name == "chmod"
+    )
+}
+
+
+ rule ELF_Feature_DynSym_Manipulate_Socket
+ {
+  meta:
+    description = "check for dynamic symbols of tools that can modify options and settings for sockets on an endpoint"
+    DaysofYARA_day = "89/100"
+    author = "Greg Lesnewich"
+    reference = "https://man7.org/linux/man-pages/man2/getsockopt.2.html"
+    reference = "https://blogs.oracle.com/solaris/post/inside-elf-symbol-tables"
+  condition:
+    for any thing in elf.dynsym: (
+      thing.name == "getsockopt" or thing.name == "setsockopt"
+    )
+ }
+
 //rule _broken_dont_run_SUSP_ResourceNames_QakBot_Configs
 //{
 //  meta:
