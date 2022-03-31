@@ -12,6 +12,35 @@ import "math"
 import "console"
 import "dotnet"
 
+rule ELF_Feature_SymTab_chmod
+{
+  meta:
+    description = "check the symbol table for references to chmod that can change a file's permissions"
+    DaysofYARA_day = "90/100"
+    author = "Greg Lesnewich"
+    reference = "https://man7.org/linux/man-pages/man2/chmod.2.html"
+    reference = "https://blogs.oracle.com/solaris/post/inside-elf-symbol-tables"
+  condition:
+    for any thing in elf.symtab: (
+      thing.name icontains "chmod"
+    )
+}
+
+
+ rule ELF_Feature_SymTab_Manipulate_Socket
+ {
+  meta:
+    description = "check the symbol table for references to tools that can modify options and settings for sockets on an endpoint"
+    DaysofYARA_day = "90/100"
+    author = "Greg Lesnewich"
+    reference = "https://man7.org/linux/man-pages/man2/getsockopt.2.html"
+    reference = "https://blogs.oracle.com/solaris/post/inside-elf-symbol-tables"
+  condition:
+    for any thing in elf.symtab: (
+      thing.name icontains "getsockopt" or thing.name icontains "setsockopt"
+    )
+ }
+
 rule ELF_Feature_DynSym_chmod
 {
   meta:
