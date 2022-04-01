@@ -11,6 +11,19 @@ import "hash"
 import "math"
 import "console"
 import "dotnet"
+import "elf"
+
+rule Logger_ELF_Section
+{
+  meta:
+    description = "print out all the ELF section names en masse for analysis "
+    DaysofYARA_day = "91/100"
+    author = "Greg Lesnewich"
+  condition:
+    for all sec in elf.sections:(
+      console.log("section name: ", sec.name)
+    )
+}
 
 rule ELF_Feature_SymTab_chmod
 {
