@@ -13,6 +13,32 @@ import "console"
 import "dotnet"
 import "elf"
 
+rule Logger_PE_Section_Hash
+{
+  meta:
+    description = "hash all of the PE sections that contain code for comparison en masse for analysis "
+    DaysofYARA_day = "92/100"
+    author = "Greg Lesnewich"
+  condition:
+    and for all var_sect in pe.sections: (
+        var_sect.characteristics & pe.SECTION_CNT_CODE and var_sect.raw_data_size != 0 and
+        console.log("PE Section Hash: ", hash.md5(var_sect.raw_data_offset, var_sect.raw_data_size))
+    )
+}
+
+rule Logger_ELF_Section_Hash
+{
+  meta:
+    description = "hash all of the ELF sections for comparison en masse for analysis "
+    DaysofYARA_day = "92/100"
+    author = "Greg Lesnewich"
+  condition:
+    for all sect in elf.sections:(
+      sect.size != 0 and
+      console.log("ELF Section hash: ", hash.md5(sect.offset, sect.size))
+    )
+}
+
 rule Logger_ELF_Section
 {
   meta:
