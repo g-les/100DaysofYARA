@@ -13,6 +13,18 @@ import "console"
 import "dotnet"
 import "elf"
 
+rule Logger_PE_Resource_Hash
+{
+  meta:
+    description = "hash all of the resources in an embedded PE to look for cheap overlaps! "
+    DaysofYARA_day = "93/100"
+    author = "Greg Lesnewich"
+  condition:
+    for all var_rsrc in pe.resources: ( 
+      console.log("PE Resource Hash: ", hash.sha256(var_rsrc.offset, var_rsrc.length))
+    )
+}
+
 rule Logger_PE_Section_Hash
 {
   meta:
