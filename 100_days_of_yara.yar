@@ -13,6 +13,35 @@ import "console"
 import "dotnet"
 import "elf"
 
+rule APT_RU_Turla_Gazer_Embedded_Resource_RichHeader
+{
+  meta:
+    description = "lets get weird - track embedded Gazer payloads based on their shared rich headers"
+    hash = "d0b169d2e753191a5c366a863d216bc5a9eb5e173f0bd5a61f126c4fd16484ac"
+    hash = "473aa2c3ace12abe8a54a088a08e00b7bd71bd66cda16673c308b903c796bec0"
+    hash = "a65bc4adbd61c098acf40ef81dc8b6b10269af0d9ebbdc18b48439df76c18cb3"
+    DaysofYARA_day = "94/100"
+    author = "Greg Lesnewich"
+  condition:
+     for any var_rsrc in pe.resources: (
+      uint16be(var_rsrc.offset) == 0x4d5a and
+      hash.md5(var_rsrc.offset+0x80, 0x80) == "dd006bd9a43c05c9457a9e6b9e1636ca")
+}
+
+rule Logger_PE_Embedded_PE_Resource_RichHeader
+{
+  meta:
+    description = "lets get weird - try to see if the embedded PE files in the resource section have the same rich header hash. Unlike most deployments of YARA you'll see, we're just going to hash the raw bytes, not the once XOR'd bytes"
+    DaysofYARA_day = "94/100"
+    author = "Greg Lesnewich"
+  condition:
+    for any var_rsrc in pe.resources: (
+      uint16be(var_rsrc.offset) == 0x4d5a and
+        console.log("Embedded Resource Rich Header Hash: ", hash.md5(var_rsrc.offset+0x80, 0x80))
+        and console.log("Resource Hash: ", hash.sha256(var_rsrc.offset, var_rsrc.length))
+    )
+}
+
 rule Logger_PE_Resource_Hash
 {
   meta:
