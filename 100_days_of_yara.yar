@@ -34,6 +34,7 @@ rule Logger_PE_Embedded_PE_Resource_RichHeader
     description = "lets get weird - try to see if the embedded PE files in the resource section have the same rich header hash. Unlike most deployments of YARA you'll see, we're just going to hash the raw bytes, not the once XOR'd bytes"
     DaysofYARA_day = "94/100"
     author = "Greg Lesnewich"
+    reference = "https://www.virusbulletin.com/virusbulletin/2020/01/vb2019-paper-rich-headers-leveraging-mysterious-artifact-pe-format/"
   condition:
     for any var_rsrc in pe.resources: (
       uint16be(var_rsrc.offset) == 0x4d5a and
