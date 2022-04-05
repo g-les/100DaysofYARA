@@ -13,6 +13,54 @@ import "console"
 import "dotnet"
 import "elf"
 
+rule Logger_Export_Bytes
+{
+  meta:
+    description = "dump out bytes at export offset"
+    DaysofYARA_day = "95/100"
+    author = "Greg Lesnewich"
+  condition:
+    for all thing in pe.export_details:( 
+      thing.offset != 0x0 and
+      console.log("Export Name: ", thing.name) and
+      console.hex("Bytes at Export: ", uint32be(thing.offset)) and
+      console.hex("Bytes at Export:     ", uint32be(thing.offset+4)))
+}
+
+rule MAL_PLAINTEE_Export_Bytes
+{
+  meta:
+    description = "Sometimes adversaries will change up their export names, but potentially keep the same relative functionality! We can see this here by looking for the bytes 0xe90b0000 at the export offset, which will catch exports named Add and OpenURLA across multiple PLAINTEE samples"
+    hash = "22a5bd54f15f33f4218454e53679d7cfae32c03ddb6ec186fb5e6f8b7f7c098b"
+    hash = "c35609822e6239934606a99cb3dbc925f4768f0b0654d6a2adc35eca473c505d"
+    hash = "863a9199decf36895d5d7d148ce9fd622e825f393d7ebe7591b4d37ef3f5f677"
+    DaysofYARA_day = "95/100"
+    author = "Greg Lesnewich"
+  condition:
+    for any thing in pe.export_details:( thing.offset != 0x0 and
+      uint32be(thing.offset) == 0xe90b0000)
+    )
+}
+
+rule SUSP_Oddity_Export_Bytes_DPRKMals
+{
+  meta:
+    description = "Sometimes adversaries will change up their export names, but potentially keep the same relative functionality! This is a much looser association across multiple malware families from DPRK-ish actors. but at least it catches some _similar_ samples with varying export names such as: ASN2_TYPE_newW, CAST_encryptW, or  OCSP_resp_findW"
+    DRATzarus_hash = "18dfdc113366d5361f9c06432608195d7a7467771fc904f32ea70885b8f40d29"
+    DRATzarus_hash = "c8707d9d7f3ade7f8aa25034e6a73060e5998db980e90452eb0190994036d781"
+    Klackring_hash = "84b5a89917792291e2425b64e093580ca8d2e106532e433e949cdde3c2db4053"
+    Klackring_hash = "9af974c4aeac4e2aab36bb0cc604fae21f09833bd0be501567dc6dda62d7ce18"
+    ThreatNeedle_hash = "25d8ae4678c37251e7ffbaeddc252ae2530ef23f66e4c856d98ef60f399fa3dc"
+    ThreatNeedle_hash = "913871432989378a042f5023351c2fa2c2f43b497b75ef2a5fd16d65aa7d0f54"
+    ThreatNeedle_hash = "a75886b016d84c3eaacaf01a3c61e04953a7a3adf38acf77a4a2e3a8f544f855"
+    DaysofYARA_day = "95/100"
+    author = "Greg Lesnewich"
+  condition:
+    for any thing in pe.export_details:( thing.offset != 0x0 and
+      uint32be(thing.offset) == 0x498bc8e9
+    )
+}
+
 rule APT_RU_Turla_Gazer_Embedded_Resource_RichHeader
 {
   meta:
