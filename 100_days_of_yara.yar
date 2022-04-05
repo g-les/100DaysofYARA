@@ -37,8 +37,9 @@ rule MAL_PLAINTEE_Export_Bytes
     DaysofYARA_day = "95/100"
     author = "Greg Lesnewich"
   condition:
-    for any thing in pe.export_details:( thing.offset != 0x0 and
-      uint32be(thing.offset) == 0xe90b0000)
+    for any thing in pe.export_details:( 
+      thing.offset != 0x0 and
+      uint32be(thing.offset) == 0xe90b0000
     )
 }
 
@@ -56,8 +57,27 @@ rule SUSP_Oddity_Export_Bytes_DPRKMals
     DaysofYARA_day = "95/100"
     author = "Greg Lesnewich"
   condition:
-    for any thing in pe.export_details:( thing.offset != 0x0 and
+    for any thing in pe.export_details:( 
+      thing.offset != 0x0 and
       uint32be(thing.offset) == 0x498bc8e9
+    )
+}
+
+rule MAL_FLOWERSHOP_Export_Bytes
+{
+  meta:
+    description = "detect FLOWERSHOP samples based on bytes at start of export"
+    hash = "32159d2a16397823bc882ddd3cd77ecdbabe0fde934e62f297b8ff4d7b89832a"
+    hash = "63735d555f219765d486b3d253e39bd316bbcb1c0ec595ea45ddf6e419bef3cb"
+    hash = "683ce2c7c80b180768fe4d2a39030dc7c4f67db79d1953ee4803522131f533a3"
+    hash = "c074aeef97ce81e8c68b7376b124546cabf40e2cd3aff1719d9daa6c3f780532"
+    hash = "ec41b029c3ff4147b6a5252cb8b659f851f4538d4af0a574f7e16bc1cd14a300"
+    DaysofYARA_day = "95/100"
+    author = "Greg Lesnewich"
+  condition:
+    for any thing in pe.export_details:( 
+      thing.offset != 0x0 and
+      uint32be(thing.offset) == 0x33c0c3a1
     )
 }
 
