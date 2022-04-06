@@ -13,6 +13,42 @@ import "console"
 import "dotnet"
 import "elf"
 
+rule SUSP_PE_Resource_Reversed_PE
+{
+  meta:
+    description = "check for MZ at the end of the of any of the resources to see if they may contain a reversed PE"
+    DaysofYARA_day = "96/100"
+    author = "Greg Lesnewich"
+  condition:
+    for any resource in pe.resources:
+    (
+        uint16be((resource.offset + resource.length) - 2 ) == 0x5a4d
+    )
+}
+
+
+rule SUSP_PE_Overlay_Reversed_PE
+{
+  meta:
+    description = "check for MZ at the end of the of the overlay to see if it may contain a reversed PE"
+    DaysofYARA_day = "96/100"
+    author = "Greg Lesnewich"
+  condition:
+    pe.overlay.offset != 0x0 and
+    uint16be((pe.overlay.offset + pe.overlay.size) - 2) == 0x5a4d
+}
+
+
+rule SUSP_Reversed_PE_File
+{
+  meta:
+    description = "Check for MZ at the end of a file to detect a reversed PE"
+    DaysofYARA_day = "96/100"
+    author = "Greg Lesnewich"
+  condition:
+    uint16be(filesize - 2) == 0x5a4d
+}
+
 rule Logger_Export_Bytes
 {
   meta:
