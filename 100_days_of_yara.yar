@@ -13,6 +13,37 @@ import "console"
 import "dotnet"
 import "elf"
 
+rule MAL_WildPressure_Milum_RichHeader
+{
+  meta:
+    description = "rule to detect Milum/WildPressure based on rich header "
+    DaysofYARA_day = "97/100"
+    author = "Greg Lesnewich"
+  condition:
+    hash.md5(pe.rich_signature.clear_data) == "7feb5a877b8fe9324f621491dc3a7212"
+}
+
+rule Logger_RichSignature_Hash_Gen
+{
+  meta:
+    description = "autogen most of a rule based on rich header hash overlaps "
+    DaysofYARA_day = "97/100"
+    author = "Greg Lesnewich"
+  condition:
+    console.log("rule RichHeaderHash { condition: uint16(0) == 0x5A4D and hash.md5(pe.rich_signature.clear_data) == ", hash.md5(pe.rich_signature.clear_data))
+}
+
+rule Logger_RichSignature_Offset
+{
+  meta:
+    description = "dump out stats from rich header data"
+    DaysofYARA_day = "97/100"
+    author = "Greg Lesnewich"
+  condition:
+    console.hex("Rich Header Offset: ", pe.rich_signature.offset) and
+    console.log("Rich Header Length: ", pe.rich_signature.length)
+}
+
 rule SUSP_PE_Resource_Reversed_PE
 {
   meta:
