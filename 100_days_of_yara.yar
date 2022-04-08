@@ -13,6 +13,54 @@ import "console"
 import "dotnet"
 import "elf"
 
+rule Logger_Export_Hash
+{
+  meta:
+    description = "hash the first 20 bytes of each export, cause why not?"
+    DaysofYARA_day = "98/100"
+    author = "Greg Lesnewich"
+  condition:
+    for all thing in pe.export_details:(
+      thing.offset != 0x0 and
+      console.log("Export Name: ", thing.name) and
+      console.log("Export_Func_Hash: ", hash.md5(thing.offset, 20)))
+}
+
+rule Example_ExportFunc_Partial_Hash
+{
+  meta:
+    description = "hash the first 20 bytes of each export to look for shared code across samples"
+    DaysofYARA_day = "98/100"
+    author = "Greg Lesnewich"
+    hash = "030cbd1a51f8583ccfc3fa38a28a5550dc1c84c05d6c0f5eb887d13dedf1da01"
+    hash = "4dcb633f75b88babc6ee3d359e7ecf0c62ee0464db50d8f9f025e4f3044f8464"
+  condition:
+    for all thing in pe.export_details:(
+      thing.offset != 0x0 and
+      hash.md5(thing.offset, 20) == "1f9091210406cbcd7f3c98426f94aa60" )
+}
+
+rule MAL_WINNTI_ExportFunc_Hash
+{
+  meta:
+    description = "hash the first 20 bytes of each export to look for shared code across samples"
+    DaysofYARA_day = "98/100"
+    author = "Greg Lesnewich"
+    hash = "5b0b754b24c324f7b53f256e9612ddd5a422e57ae235acf4c757efdedf795f38"
+    hash = "48a941092fae50f6848aad632a893e677569a5b3a12672f55e99434d03d8812a"
+    hash = "9c2a133070adb48b168ae146da5f2d3b605fd1929453f9a5a9310a02e5966bfc"
+    hash = "b03e2465eaa07e46392d337a028dc1f9c1a6c5889604e282aa08e7c38d7bb2b9"
+    hash = "c400cae4804b1cb16e75b0a7c646bc6d90dbdec7c975f3649ec07186e2c769c7"
+    hash = "f6c1dba044696f8a27b158f9d9f9d36c43d6765a02baddcf999241c7d77f300a"
+    hash = "ff7a766f9924cf8461ec3146803879a28b34861021c5267de1cb1fcf832ae150"
+    hash = "a32bda4bdfe8d04b4f53d5adc82f9bbdb6dc5c7b439ba0bdc02faadd6e16550c"
+  condition:
+    for all thing in pe.export_details:(
+      thing.offset != 0x0 and
+      hash.md5(thing.offset, 20) == "9f51b30d2f7a6b094cc1f0eccfc33d22" )
+}
+
+
 rule MAL_WildPressure_Milum_RichHeader
 {
   meta:
