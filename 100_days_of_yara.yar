@@ -13,6 +13,28 @@ import "console"
 import "dotnet"
 import "elf"
 
+rule SUSP_PE_VersionInfo_SpaceOddity_End
+{
+  meta:
+    description = "check for a space at the end of any of the PE version dictionary entries"
+    DaysofYARA_day = "99/100"
+    author = "Greg Lesnewich"
+  condition:
+    for any item in pe.version_info_list:(
+      item.value iendswith " ")
+}
+
+rule SUSP_PE_VersionInfo_SpaceOddity_Start
+{
+  meta:
+    description = "check for a space at the start of any of the PE version dictionary entries"
+    DaysofYARA_day = "99/100"
+    author = "Greg Lesnewich"
+  condition:
+    for any item in pe.version_info_list:(
+      item.value istartswith " " )
+}
+
 rule Logger_Export_Hash
 {
   meta:
