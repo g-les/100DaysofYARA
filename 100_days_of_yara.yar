@@ -13,6 +13,31 @@ import "console"
 import "dotnet"
 import "elf"
 
+rule Logger_Find_Some_Overlaps 
+{
+  meta:
+    description = "mine some overlaps across a sample set - warning this may find legitimate code sharing not evil"
+    DaysofYARA_day = "100/100"
+    author = "Greg Lesnewich"
+  condition:
+    //mine the sections
+    for any var_sect in pe.sections: (
+      var_sect.characteristics and (pe.SECTION_CNT_CODE or pe.SECTION_MEM_EXECUTE) and
+      console.hex("Bytes at Section Start ", uint32be(var_sect.raw_data_offset))
+    ) and 
+    
+    //mine the entry point 
+    console.hex("Entry Point ", pe.entry_point) and
+    console.hex("Bytes at Entry Point ", uint32be(pe.entry_point)) and
+
+    //mine the exports 
+    for all thing in pe.export_details:(
+      thing.offset != 0x0 and
+      console.log("Export Name: ", thing.name) and
+      console.log("ExportFunc_Partial_Hash: ", hash.md5(thing.offset, 20)))
+
+}
+
 rule SUSP_PE_VersionInfo_SpaceOddity_End
 {
   meta:
