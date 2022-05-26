@@ -13,7 +13,10 @@ import "console"
 import "dotnet"
 import "elf"
 
-rule Logger_Find_Some_Overlaps 
+
+
+
+rule Logger_Find_Some_Overlaps
 {
   meta:
     description = "mine some overlaps across a sample set - warning this may find legitimate code sharing not evil"
@@ -24,13 +27,13 @@ rule Logger_Find_Some_Overlaps
     for any var_sect in pe.sections: (
       var_sect.characteristics and (pe.SECTION_CNT_CODE or pe.SECTION_MEM_EXECUTE) and
       console.hex("Bytes at Section Start ", uint32be(var_sect.raw_data_offset))
-    ) and 
-    
-    //mine the entry point 
+    ) and
+
+    //mine the entry point
     console.hex("Entry Point ", pe.entry_point) and
     console.hex("Bytes at Entry Point ", uint32be(pe.entry_point)) and
 
-    //mine the exports 
+    //mine the exports
     for all thing in pe.export_details:(
       thing.offset != 0x0 and
       console.log("Export Name: ", thing.name) and
@@ -182,7 +185,7 @@ rule Logger_Export_Bytes
     DaysofYARA_day = "95/100"
     author = "Greg Lesnewich"
   condition:
-    for all thing in pe.export_details:( 
+    for all thing in pe.export_details:(
       thing.offset != 0x0 and
       console.log("Export Name: ", thing.name) and
       console.hex("Bytes at Export: ", uint32be(thing.offset)) and
@@ -199,7 +202,7 @@ rule MAL_PLAINTEE_Export_Bytes
     DaysofYARA_day = "95/100"
     author = "Greg Lesnewich"
   condition:
-    for any thing in pe.export_details:( 
+    for any thing in pe.export_details:(
       thing.offset != 0x0 and
       uint32be(thing.offset) == 0xe90b0000
     )
@@ -219,7 +222,7 @@ rule SUSP_Oddity_Export_Bytes_DPRKMals
     DaysofYARA_day = "95/100"
     author = "Greg Lesnewich"
   condition:
-    for any thing in pe.export_details:( 
+    for any thing in pe.export_details:(
       thing.offset != 0x0 and
       uint32be(thing.offset) == 0x498bc8e9
     )
@@ -237,7 +240,7 @@ rule MAL_FLOWERSHOP_Export_Bytes
     DaysofYARA_day = "95/100"
     author = "Greg Lesnewich"
   condition:
-    for any thing in pe.export_details:( 
+    for any thing in pe.export_details:(
       thing.offset != 0x0 and
       uint32be(thing.offset) == 0x33c0c3a1
     )
@@ -280,7 +283,7 @@ rule Logger_PE_Resource_Hash
     DaysofYARA_day = "93/100"
     author = "Greg Lesnewich"
   condition:
-    for all var_rsrc in pe.resources: ( 
+    for all var_rsrc in pe.resources: (
       console.log("PE Resource Hash: ", hash.sha256(var_rsrc.offset, var_rsrc.length))
     )
 }
@@ -407,14 +410,14 @@ rule Example_imphash_rule
      author = "beemparthiban"
      DaysofYARAday = "85/100"
      date = "2022-26-03"
-     
+
   strings:
      $a1 = "sdf"
      $a2 = "fdgfd"
-     
+
   confition:
      uint16(0) == 0x5a4d and filesize < 1MB and
-     pe.imphash() == "abdlkdhfdgkdzghkgdzfkgaskj" // just a dummy value 
+     pe.imphash() == "abdlkdhfdgkdzghkgdzfkgaskj" // just a dummy value
      and all of them
  }
 
@@ -1671,19 +1674,19 @@ rule Context_SSH_ID_File
     description = "check for SSH key files based on the string -----BEGIN.OPENSSH.PRIVATE.KEY----- at the start of the file"
     tool = "https://labs.inquest.net/tools/yara/iq-uint-trigger"
   condition:
-    filesize < 4KB and 
-    
+    filesize < 4KB and
+
     // check for -----BEGIN.OPENSSH.PRIVATE.KEY----- at 0x0
-    
-    uint32be(0x0) == 0x2d2d2d2d and 
-    uint32be(0x4) == 0x2d424547 and 
-    uint32be(0x8) == 0x494e204f and 
-    uint32be(0xc) == 0x50454e53 and 
-    uint32be(0x10) == 0x53482050 and 
-    uint32be(0x14) == 0x52495641 and 
-    uint32be(0x18) == 0x5445204b and 
-    uint32be(0x1c) == 0x45592d2d and 
-    uint16be(0x20) == 0x2d2d and 
+
+    uint32be(0x0) == 0x2d2d2d2d and
+    uint32be(0x4) == 0x2d424547 and
+    uint32be(0x8) == 0x494e204f and
+    uint32be(0xc) == 0x50454e53 and
+    uint32be(0x10) == 0x53482050 and
+    uint32be(0x14) == 0x52495641 and
+    uint32be(0x18) == 0x5445204b and
+    uint32be(0x1c) == 0x45592d2d and
+    uint16be(0x20) == 0x2d2d and
     uint8(0x22) == 0x2d
 }
 
@@ -2138,7 +2141,7 @@ rule MetaData_RTF_LastModified_test_xpcn
     hash = "322bb640d1326b7048174e5cb9cbbcf12cf676dc942e08221556df592287bac4"
     hash = "4f6b8f51fdaf708bb4fa0dbbc72da50d24f694bce2996eff3df7eeb3c1592e62"
   strings:
-    $ = "{\\operator test_xpcn}" ascii wide 
+    $ = "{\\operator test_xpcn}" ascii wide
   condition:
     uint32be(0) == 0x7B5C7274 and uint8(4)== 0x66 and 1 of them
 }
@@ -2337,105 +2340,105 @@ rule SUSP_HTTP_Reverse
 }
 
 rule MetaData_Doc_Name_James {
-  meta: 
+  meta:
     author = "Greg Lesnewich"
     DaysofYARA_day =  "55/100"
-  strings: 
+  strings:
     $ = {1E000000??000000 4a 61 6d 65 73 00 00 00 1E 00}
-  condition: 
-    uint16be(0) == 0xD0CF and 
-    1 of them 
+  condition:
+    uint16be(0) == 0xD0CF and
+    1 of them
 }
 rule MetaData_Doc_Name_Robert {
-  meta: 
+  meta:
     author = "Greg Lesnewich"
     DaysofYARA_day =  "55/100"
-  strings: 
+  strings:
     $ = {1E000000??000000 52 6f 62 65 72 74 00 00 1E 00}
-  condition: 
-    uint16be(0) == 0xD0CF and 
-    1 of them 
+  condition:
+    uint16be(0) == 0xD0CF and
+    1 of them
 }
 
 rule MetaData_Doc_Name_John_WIDE {
-  meta: 
+  meta:
     author = "Greg Lesnewich"
     DaysofYARA_day =  "55/100"
-  strings: 
+  strings:
     $ = {1E000000??000000 4a 00 6f 00 68 00 6e}
-  condition: 
-    uint16be(0) == 0xD0CF and 
-    1 of them 
+  condition:
+    uint16be(0) == 0xD0CF and
+    1 of them
 }
 rule MetaData_Doc_Name_Michael {
-  meta: 
+  meta:
     author = "Greg Lesnewich"
     DaysofYARA_day =  "55/100"
-  strings: 
+  strings:
     $ = {1E000000??000000 4d 69 63 68 61 65 6c 00 1E 00}
-  condition: 
-    uint16be(0) == 0xD0CF and 
-    1 of them 
+  condition:
+    uint16be(0) == 0xD0CF and
+    1 of them
 }
 rule MetaData_Doc_Name_William {
-  meta: 
+  meta:
     author = "Greg Lesnewich"
     DaysofYARA_day =  "55/100"
-  strings: 
+  strings:
   $ = {1E000000??000000 57 69 6c 6c 69 61 6d 00 1E 00}
-  condition: 
-    uint16be(0) == 0xD0CF and 
-    1 of them 
+  condition:
+    uint16be(0) == 0xD0CF and
+    1 of them
 }
 rule MetaData_Doc_Name_David {
-  meta: 
+  meta:
     author = "Greg Lesnewich"
     DaysofYARA_day =  "55/100"
-  strings: 
+  strings:
     $ = {1E000000??000000 44 61 76 69 64 00 00 00 1E 00}
-  condition: 
-    uint16be(0) == 0xD0CF and 
-    1 of them 
+  condition:
+    uint16be(0) == 0xD0CF and
+    1 of them
 }
 rule MetaData_Doc_Name_Richard {
-  meta: 
+  meta:
     author = "Greg Lesnewich"
     DaysofYARA_day =  "55/100"
-  strings: 
+  strings:
     $ = {1E000000??000000 52 69 63 68 61 72 64 00 1E 00}
-  condition: 
-    uint16be(0) == 0xD0CF and 
-    1 of them 
+  condition:
+    uint16be(0) == 0xD0CF and
+    1 of them
 }
 rule MetaData_Doc_Name_Joseph {
-  meta: 
+  meta:
     author = "Greg Lesnewich"
     DaysofYARA_day =  "55/100"
-  strings: 
+  strings:
     $ = {1E000000??000000 4a 6f 73 65 70 68 00 00 1E 00}
-  condition: 
-    uint16be(0) == 0xD0CF and 
-    1 of them 
+  condition:
+    uint16be(0) == 0xD0CF and
+    1 of them
 }
 rule MetaData_Doc_Name_Thomas {
-  meta: 
+  meta:
     author = "Greg Lesnewich"
     DaysofYARA_day =  "55/100"
-  strings: 
+  strings:
     $ = {1E000000??000000 54 68 6f 6d 61 73 00 00 1E 00}
-  condition: 
-    uint16be(0) == 0xD0CF and 
-    1 of them 
+  condition:
+    uint16be(0) == 0xD0CF and
+    1 of them
 }
 rule MetaData_Doc_Name_Charles {
-  meta: 
+  meta:
     author = "Greg Lesnewich"
     DaysofYARA_day =  "55/100"
-  strings: 
+  strings:
     $ = {1E000000??000000 43 68 61 72 6c 65 73 001E00}
-  condition: 
-    uint16be(0) == 0xD0CF and 
-    1 of them 
+  condition:
+    uint16be(0) == 0xD0CF and
+    1 of them
 }
 
 
@@ -3017,7 +3020,7 @@ rule SUSP_Mozilla_Profile_Check__xor
 }
 
 /*
-Day 42 did not include a shared rule! 
+Day 42 did not include a shared rule!
 */
 
 rule SUSP_Embedded_PE_at_Section
@@ -3326,7 +3329,7 @@ rule PE_Feature_SectionName_Slash
 
 
 rule SUSP_5_PEs_in_rsrcs
-{ 
+{
   meta:
     description = "check if at least five of the resources for a given PE are also PE's"
     author = "Greg Lesnewich"
@@ -3337,7 +3340,7 @@ rule SUSP_5_PEs_in_rsrcs
 }
 
 rule SUSP_4_PEs_in_rsrcs
-{ 
+{
   meta:
     description = "check if at least four of the resources for a given PE are also PE's"
     author = "Greg Lesnewich"
@@ -3349,7 +3352,7 @@ rule SUSP_4_PEs_in_rsrcs
 
 
 rule SUSP_3_PEs_in_rsrcs
-{ 
+{
   meta:
     description = "check if at least three of the resources for a given PE are also PE's"
     author = "Greg Lesnewich"
@@ -3360,7 +3363,7 @@ rule SUSP_3_PEs_in_rsrcs
 }
 
 rule SUSP_2_PEs_in_rsrcs
-{ 
+{
   meta:
     description = "check if at least two of the resources for a given PE are also PE's"
     author = "Greg Lesnewich"
@@ -3537,15 +3540,15 @@ rule SUSP_ExchangeTransport_Service_Assembly
     description = "Track references to Microsoft.Exchange.Data.Transport assemblies and other aspects of exchange transport agents, as used by the passive NETTRANS backdoor"
     reference = "https://docs.microsoft.com/en-us/previous-versions/office/exchange-server-api/aa564119(v=exchg.150)"
   strings:
-  
+
     //Microsoft.Exchange.Data.Transport.Smtp
     $ = "SmtpReceiveAgentFactory" ascii
     $ = "SmtpReceiveAgent" ascii
-      
+
     //Microsoft.Exchange.Data.Transport.Routing
     $ = "RoutingAgentFactory"
     $ = "RoutingAgent"
-      
+
     //Microsoft.Exchange.Data.Transport
     $ = "SmtpServer" ascii
     $ = "ReceiveMessageEventSource" ascii
@@ -3559,11 +3562,11 @@ rule SUSP_ExchangeTransport_Service_Assembly
     $ = "EnvelopeRecipientCollection" ascii
     $ = "MailItem" ascii
     $ = "get_MailItem" ascii
-      
+
     //Microsoft.Exchange.Data.Transport.Email
     $ = "EmailMessage" ascii
     $ = "get_Message" ascii
-      
+
     //Microsoft.Exchange.Data.Common
     $ = "DotfuscatorAttribute"
     $ = "TransportRuleAgentFactory"
@@ -3633,12 +3636,12 @@ rule MAL_CACHEMONEY_Config
     description = "inspired by Adrien to detect CACHEMONEY configs based on decoded values and expected first bytes"
 
   condition:
-    filesize < 200KB and 
-    ((uint8(0x0) ^ 0xEF) ^ uint8(0x32)) == 0x54 and 
+    filesize < 200KB and
+    ((uint8(0x0) ^ 0xEF) ^ uint8(0x32)) == 0x54 and
       // first byte of config is always 0xef, so xor that with the value at 0x0 to get first byte of xor key and verify it decoded as expected
-    ((uint8(0x1) ^ 0xBB) ^ uint8(0x33)) == 0x69 and 
+    ((uint8(0x1) ^ 0xBB) ^ uint8(0x33)) == 0x69 and
       // 2nd byte of config is always 0xbb, xor that with int at 0x1 to check byte of the XOR key, and verify it decoded the cleartext byte
-    ((uint8(0x2) ^ 0xBF) ^ uint8(0x34)) == 0x6D  
+    ((uint8(0x2) ^ 0xBF) ^ uint8(0x34)) == 0x6D
       // 3rd byte of config is always 0xbf, so xor that with the value at 0x2 to get third byte of xor key
 }
 
@@ -3707,17 +3710,17 @@ rule MAL_SquirrelWaffle_Blocklist_Section_Start
       //68 f0 a5 5c 00     PUSH       blocklist_location
   condition:
     for 1 i in (
-    pe.rva_to_offset(uint32(@data_blob+12) - pe.image_base) .. 
-    math.min(pe.rva_to_offset(uint32(@data_blob+12) - pe.image_base) + 3000, 
-      //loop through the 3k bytes following the offset we found pointed to at the end of the $data_blob string, 
-      //stopping at the start of the next section 
-        
-	(pe.sections[2].raw_data_offset))): 
+    pe.rva_to_offset(uint32(@data_blob+12) - pe.image_base) ..
+    math.min(pe.rva_to_offset(uint32(@data_blob+12) - pe.image_base) + 3000,
+      //loop through the 3k bytes following the offset we found pointed to at the end of the $data_blob string,
+      //stopping at the start of the next section
+
+	(pe.sections[2].raw_data_offset))):
         // use the start of the next section as the upper bound
           (
           (uint16(i) == 0x0000 and //set an anchor for the end of the data blob, where the XOR key starts
             (
-            uint32be(i+2) ^ uint32be(pe.rva_to_offset(uint32(@data_blob+12) - pe.image_base) 
+            uint32be(i+2) ^ uint32be(pe.rva_to_offset(uint32(@data_blob+12) - pe.image_base)
             //xor the dword 2 bytes after the 00's with the first dword of the blocklist
             ) == 0x39342e34))) // and verify that it decodes to the first IP address listed
 }
@@ -3737,8 +3740,8 @@ rule MAL_SquirrelWaffle_Blocklist_Next_Section_Offset
       //68 9c 08 00 00     PUSH       0x89c                 changes each loop
       //68 f0 a5 5c 00     PUSH       blocklist_loc
   condition:
-    for any i in (pe.rva_to_offset(uint32(@data_blob+12) - pe.image_base) .. 
-    math.min(pe.sections[1].raw_data_offset + pe.sections[1].raw_data_size, pe.rva_to_offset(uint32(@data_blob+12) - pe.image_base) + 3000)): 
+    for any i in (pe.rva_to_offset(uint32(@data_blob+12) - pe.image_base) ..
+    math.min(pe.sections[1].raw_data_offset + pe.sections[1].raw_data_size, pe.rva_to_offset(uint32(@data_blob+12) - pe.image_base) + 3000)):
       // use the 2nd section (index 1) as a guardrail for the loop
         (
         (uint16(i) == 0x0000 and //set an anchor for the end of the data blob, where the XOR key starts
@@ -4230,7 +4233,7 @@ rule SUSP_b64d_PE_at_Rsrc
 }
 
 rule SUSP_Single_Byte_XOR_Encoded_PE_rsrc
-{ 
+{
   meta:
     description = "inspired by Jesko (@huettenhain) and binary Refinery using the byte from position 3 as a XOR key to decode multiple executables. Typically that byte is zero, meaning in encoded form it will contain our XOR key! Unlike SUSP_XORd_PE_at_RSRC, this rule also catches a sample from WildNeutron/Morpho's toolset, dbb0ea0436f70f2a178a60c4d8b791b3 because it removed the !This Program string (same in the normal header). Final note that Morpho sample's PE in the resources is called BIN and id = 666 :thinking-emoji:"
     author = "Greg Lesnewich"
@@ -4244,7 +4247,7 @@ rule SUSP_Single_Byte_XOR_Encoded_PE_rsrc
 }
 
 rule SUSP_Single_Byte_XOR_Encoded_PE_overlay
-{ 
+{
   meta:
     description = "inspired by Jesko (@huettenhain) and binary Refinery using the byte from position 3 as a XOR key to decode multiple executables. Typically that byte is zero, meaning in encoded form it will contain our XOR key!"
     author = "Greg Lesnewich"
@@ -4257,7 +4260,7 @@ rule SUSP_Single_Byte_XOR_Encoded_PE_overlay
 }
 
 rule SUSP_Single_Byte_XOR_Encoded_PE
-{ 
+{
   meta:
     description = "inspired by Jesko (@huettenhain) and binary Refinery using the byte from position 3 as a XOR key to decode multiple executables. Typically that byte is zero, meaning in encoded form it will contain our XOR key! Less useful in YARA for looking directly at the files but a decent test for overlays and resources."
     author = "Greg Lesnewich"
@@ -4285,7 +4288,7 @@ rule SUSP_XORd_PE_at_Overlay
 }
 
 rule SUSP_XORd_PE_at_RSRC
-{ 
+{
   meta:
     description = "Another MZ header hunt xor'ing the first two bytes of the MZ header together (4d 5a) == 23 (0x17). This is probably a silly thing to do, as any number of other legit headers could have this, but theoretically any PE xor'd with a single byte key should keep this relationship between the first two bytes. We can also check that the first two bytes of !This Program cannot be ... (which are always 77 bytes into the PE) also have the same xor'd relationship within a resource of the PE"
     author = "Greg Lesnewich"
@@ -4323,7 +4326,7 @@ rule SUSP_space_in_section_name
 }
 
 rule SUSP_PE_at_Overlay
-{ 
+{
   meta:
 	description = "check for an additional PE header found at the overlay offset"
         reference_inspiration = "https://twitter.com/notareverser/status/1477661404085866500"
@@ -4364,7 +4367,7 @@ rule Example_ExpHash
 	pe.rva_to_offset(
 		pe.data_directories[pe.IMAGE_DIRECTORY_ENTRY_EXPORT].virtual_address),        // use the offset of our directory
 		pe.data_directories[pe.IMAGE_DIRECTORY_ENTRY_EXPORT].size)  //as Adrien pointed out, don't need this offset, just using its size field as the length to hash
-		== "c8789e010163226dc559d4ffed4301c1" 
+		== "c8789e010163226dc559d4ffed4301c1"
   //  hash.md5(0x55c0,0x44) == "c8789e010163226dc559d4ffed4301c1" also catches this bull
 }
 
