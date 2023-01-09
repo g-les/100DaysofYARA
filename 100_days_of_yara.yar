@@ -403,24 +403,6 @@ rule ELF_Feature_DynSym_chmod
 //
 //}
 
-rule Example_imphash_rule
-{
-  meta:
-     description = "when trying to detect samples using imphash make sure to enter the lowercase value of the imphash, otherwise yara won't recogonize it."
-     author = "beemparthiban"
-     DaysofYARAday = "85/100"
-     date = "2022-26-03"
-
-  strings:
-     $a1 = "sdf"
-     $a2 = "fdgfd"
-
-  confition:
-     uint16(0) == 0x5a4d and filesize < 1MB and
-     pe.imphash() == "abdlkdhfdgkdzghkgdzfkgaskj" // just a dummy value
-     and all of them
- }
-
 
 rule MAL_HeaderTip_Loader_Resource {
   meta:
