@@ -403,24 +403,6 @@ rule ELF_Feature_DynSym_chmod
 //
 //}
 
-rule Example_imphash_rule
-{
-  meta:
-     description = "when trying to detect samples using imphash make sure to enter the lowercase value of the imphash, otherwise yara won't recogonize it."
-     author = "beemparthiban"
-     DaysofYARAday = "85/100"
-     date = "2022-26-03"
-
-  strings:
-     $a1 = "sdf"
-     $a2 = "fdgfd"
-
-  confition:
-     uint16(0) == 0x5a4d and filesize < 1MB and
-     pe.imphash() == "abdlkdhfdgkdzghkgdzfkgaskj" // just a dummy value
-     and all of them
- }
-
 
 rule MAL_HeaderTip_Loader_Resource {
   meta:
@@ -2074,7 +2056,6 @@ rule Reference_DOS_Path_Unknown
 	and not Reference_DOS_Path_winmgmts_root
 	and not Reference_DOS_Path_LCD
 	and not Reference_DOS_Path_DISPLAY
-	and not Reference_DOS_Path_Drive
 	and not Reference_DOS_Path_Vd1
 	and not Reference_DOS_Path_mailslot
 	and not Reference_DOS_Path_RESS_DTDOS
@@ -2932,19 +2913,6 @@ rule SUSP_Query_HTTPProxy_Data
     all of them
 }
 
-rule SUSP_Mozilla_Profile_Check
-{
-  meta:
-    description = "check for references to profile settings used by Mozilla"
-    author = "Greg Lesnewich"
-    DaysofYARA_day =  "43/100"
-  strings:
-    $ = "profiles.ini" ascii wide
-  condition:
-    uint16(0) == 0x5A4D and
-    filesize < 5MB and
-    all of them
-}
 
 
 rule SUSP_Query_HTTPProxy_Data_b64
@@ -2975,20 +2943,6 @@ rule SUSP_Query_HTTPProxy_Data_xor
     all of them
 }
 
-
-rule SUSP_Mozilla_Profile_Check
-{
-  meta:
-    description = "check for references to profile settings used by Mozilla"
-    author = "Greg Lesnewich"
-    DaysofYARA_day =  "43/100"
-  strings:
-    $ = "profiles.ini" ascii wide
-  condition:
-    uint16(0) == 0x5A4D and
-    filesize < 5MB and
-    all of them
-}
 
 rule SUSP_Mozilla_Profile_Check_b64
 {
