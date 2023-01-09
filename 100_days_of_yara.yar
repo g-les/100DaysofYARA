@@ -3197,18 +3197,6 @@ rule PE_Feature_Empty_RCDATA
     )
 }
 
-//rule PE_Feature_Undefined_DLL_Name
-//{
-//  meta:
-//    description = "check for files that have exports but the dll_name field is not there using the new defined keyword"
-//    author = "Greg Lesnewich"
-//    DaysofYARA_day =  "34/100"
-//    note = "requires YARA v.4.2: https://github.com/VirusTotal/yara/releases/tag/v4.2.0-rc1"
-//  condition:
-//    pe.number_of_exports > 0 and
-//    not defined pe.dll_name
-//}
-
 rule PE_Feature_Blank_DLL_Name
 {
   meta:
