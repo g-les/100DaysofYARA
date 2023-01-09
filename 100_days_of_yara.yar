@@ -295,7 +295,7 @@ rule Logger_PE_Section_Hash
     DaysofYARA_day = "92/100"
     author = "Greg Lesnewich"
   condition:
-    and for all var_sect in pe.sections: (
+    for all var_sect in pe.sections: (
         var_sect.characteristics & pe.SECTION_CNT_CODE and var_sect.raw_data_size != 0 and
         console.log("PE Section Hash: ", hash.md5(var_sect.raw_data_offset, var_sect.raw_data_size))
     )
